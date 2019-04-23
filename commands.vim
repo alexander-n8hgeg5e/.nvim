@@ -2,7 +2,7 @@
 "
 command! M call OpenMail
 command! -complete=command UnloadHidden  :call UnloadHiddenBuffers()
-command! -nargs=+ -complete=command Redir let @r=""|redir @r | execute <q-args> | redir END | new | put r
+command! -nargs=+ -complete=command R let @r=""|redir @r | execute <q-args> | redir END | new | put r
 "command! -nargs=+ -complete=command Redir let s:reg = @@ | redir @"> | execute <q-args> | redir END
 command! -complete=command C call calendar#show(1)<CR>
 

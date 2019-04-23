@@ -1,4 +1,4 @@
-source $c/keybinds_apps.vim
+source $vcd/keybinds_apps.vim
 
 let g:Netrw_UserMaps= [
 \                       ["e", "Key_3up" ],

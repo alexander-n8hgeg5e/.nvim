@@ -3,11 +3,9 @@
 "
 func! Init_Common_Color()
     let g:mycolors   =     readfile( $HOME . "/.config/nvim/". g:mycolors_flavor ."_colorschemes" )
-    let g:nowcolors  =     eval("g:nowcolors_" . g:nowcolors_flavor)
     call Daytimecolor()
     exe "colorscheme" g:colorscheme
     call Set_Subset_Color()
-    call Set_Term_Colors()
 endfunction
 
 func! Set_NormMode_Color()
@@ -27,12 +25,48 @@ function! Set_TermActiv_Color()
     exe "colorscheme"  g:term_active_colorscheme
     highlight TermCursor ctermfg=16 ctermbg=99  guibg=#000000  guifg=#ff00ff
     exe Set_Subset_Color()
+    if ! b:background == &background
+	    " need to fix the terminal colorscheme
+	    if b:background == "dark"
+	         set g:term_active_colorscheme = g:colorscheme_terminal_dark_fallback
+            end
+	    if b:background == "light"
+	         set g:term_active_colorscheme = g:colorscheme_terminal_light_fallback
+            end
+    end
 endfunction
 
 function! Set_TermInaktiv_Color()
     exe "colorscheme"  g:term_inactiv_colorscheme
     exe Set_Subset_Color()
+    if ! b:background == &background
+	    " need to fix the terminal colorscheme
+	    if b:background == "dark"
+	         set g:term_inactiv_colorscheme = g:colorscheme_terminal_dark_fallback
+            end
+	    if b:background == "light"
+	         set g:term_inactiv_colorscheme = g:colorscheme_terminal_light_fallback
+            end
+    end
 endfunction
+function! Init_TermActiv_Color()
+    "init func for term creation
+    "term buffer has no b:background set yet
+    exe "colorscheme"  g:term_active_colorscheme
+    highlight TermCursor ctermfg=16 ctermbg=99  guibg=#000000  guifg=#ff00ff
+    exe Set_Subset_Color()
+    let b:background=&background
+endfunction
+
+function! Init_TermInaktiv_Color()
+    "init func for term creation
+    "term buffer has no b:background set yet
+    exe "colorscheme"  g:term_inactiv_colorscheme
+    exe Set_Subset_Color()
+    let b:background=&background
+endfunction
+
+
 
 function! Set_Term_Colors_Dark()
      let g:terminal_color_0      =      "#000000" "black
@@ -96,10 +130,10 @@ function! Set_Term_Colors_Light()
 endfunction
 
 function! Set_Term_Colors()
-        if &background == 'dark'
+        if b:background == 'dark'
                 call Set_Term_Colors_Dark()
         endif
-        if &background == 'light'
+        if b:background == 'light'
                 call Set_Term_Colors_Light()
         endif
 endfunction
@@ -243,7 +277,6 @@ endfunction
 
 function! Daytimecolor()
   let hr = str2nr(strftime('%H'))
-
   "set c 0;for i in (seq 1 8);for j in 0 8 16 ;set c (math $c + 1); echo '  elseif hr <= '$c;echo "    let i = "(math $j + $i );echo $i $j;end;end
   if hr <= 1
     let i = 0
@@ -294,7 +327,16 @@ function! Daytimecolor()
   elseif hr <= 24
     let i = 23
   endif
-  let g:colorscheme = split(g:nowcolors)[i]
+  if g:nowcolors_flavor == "daytime"
+	  if (hr >= g:dawntime) && (hr < g:dusktime)
+                  let nc  =  "g:nowcolors_light"
+	  else
+                  let nc  =  "g:nowcolors_dark"
+	  endif
+  else
+          let nc  =     "g:nowcolors_" . g:nowcolors_flavor
+  endif
+  let g:colorscheme = split(eval(nc))[i]
   exe "colorscheme" g:colorscheme
   call Set_Subset_Color()
 endfunction

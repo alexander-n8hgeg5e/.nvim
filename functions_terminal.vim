@@ -47,19 +47,26 @@ function! Create_Terminal_buffer_0()  "means: Action: create one
 			exe "term " . tmux_cmdbase "attach-session -t" related_tmux_session_name_backup
 	                let b:tmux_session_name=related_tmux_session_name_backup
 	else
-			exe "term " . tmux_cmdbase . " new-session -s " . tmux_session_name . " -c " . cwdname
+			exe "term " . tmux_cmdbase . " new-session -s " . tmux_session_name . " -c " . cwdname . " fish"
 	                let b:tmux_session_name=tmux_session_name
 	endif
 	" set buffervars
-	" befor here buffer vars are lost
+	" buffer vars are would be lost if set earlier
         call SetBuffersMode(1)
-	call EventWinEnter()
 	let b:tmux_cmdbase=tmux_cmdbase
-	call g:DoConfigDependentTerminalConfiguration()
+	call g:DoConfigDependentTerminalConfiguration_stage0()
+    "    autocmd TermClose      <buffer>  exe 'bufunload ' . buf
 	" init keybinds
         call Init_Keybinds_(g:keybinds,'TermMode')
-        call Set_Term_Colors()      " this is needed befor terminal creation , colors are selected for background
         call SetTabName_('Term')
+	" need to run this befor startinsert
+	call g:DoConfigDependentTerminalConfiguration_stage1()
+        " this is needed befor terminal creation , colors are selected for background
+	" but after colorscheme setup stuff like DoConfigDependentTerminalConfiguration_stagex
+	" event win enter uses b:background so do it after
+	" DoConfigDependentTerminalConfiguration stuff
+	call EventWinEnter()
+        call Set_Term_Colors()
         startinsert!
 endfunction
 function! Generate_funktion_Create_Terminal_buffer()
@@ -128,58 +135,116 @@ endfunction
 
 
 "" one time terminal buffer init
-"" only config dependend stuff
-function! DoConfigDependentTerminalConfiguration_0()
+"" only config dependend stuff stage0: befor insertmode
+function! DoConfigDependentTerminalConfiguration_stage0_0()
 endfunction
-function! DoConfigDependentTerminalConfiguration_1()
-    call Set_TermInaktiv_Color()
+function! DoConfigDependentTerminalConfiguration_stage0_1()
+    call Init_TermInaktiv_Color()
 endfunction
-function! DoConfigDependentTerminalConfiguration_2()
+function! DoConfigDependentTerminalConfiguration_stage0_2()
 endfunction
-function! DoConfigDependentTerminalConfiguration_3()
-    call Set_TermInaktiv_Color()
+function! DoConfigDependentTerminalConfiguration_stage0_3()
+    call Init_TermInaktiv_Color()
 endfunction
-function! DoConfigDependentTerminalConfiguration_4()
+function! DoConfigDependentTerminalConfiguration_stage0_4()
     call Daytimecolor()
 endfunction
-function! DoConfigDependentTerminalConfiguration_5()
-    call Set_TermInaktiv_Color()
+function! DoConfigDependentTerminalConfiguration_stage0_5()
+    call Init_TermInaktiv_Color()
     call Daytimecolor()
 endfunction
-function! DoConfigDependentTerminalConfiguration_6()
+function! DoConfigDependentTerminalConfiguration_stage0_6()
     call Daytimecolor()
 endfunction
-function! DoConfigDependentTerminalConfiguration_7()
-    call Set_TermInaktiv_Color()
+function! DoConfigDependentTerminalConfiguration_stage0_7()
+    call Init_TermInaktiv_Color()
     call Daytimecolor()
 endfunction
 
-function! Generate_funktion_DoConfigDependentTerminalConfiguration()
+function! Generate_funktion_DoConfigDependentTerminalConfiguration_stage0()
 if ! g:term_color && ! g:TerminalSpecialMovement  && ! g:event_termdaytimecolor
-let g:DoConfigDependentTerminalConfiguration=function("DoConfigDependentTerminalConfiguration_0")
+let g:DoConfigDependentTerminalConfiguration_stage0=function("DoConfigDependentTerminalConfiguration_stage0_0")
 endif
 if g:term_color && ! g:TerminalSpecialMovement    && ! g:event_termdaytimecolor
-let g:DoConfigDependentTerminalConfiguration=function("DoConfigDependentTerminalConfiguration_1")
+let g:DoConfigDependentTerminalConfiguration_stage0=function("DoConfigDependentTerminalConfiguration_stage0_1")
 endif
 if ! g:term_color && g:TerminalSpecialMovement    && ! g:event_termdaytimecolor
-let g:DoConfigDependentTerminalConfiguration=function("DoConfigDependentTerminalConfiguration_2")
+let g:DoConfigDependentTerminalConfiguration_stage0=function("DoConfigDependentTerminalConfiguration_stage0_2")
 endif
 if g:term_color && g:TerminalSpecialMovement      && ! g:event_termdaytimecolor
-let g:DoConfigDependentTerminalConfiguration=function("DoConfigDependentTerminalConfiguration_3")
+let g:DoConfigDependentTerminalConfiguration_stage0=function("DoConfigDependentTerminalConfiguration_stage0_3")
 endif
 if ! g:term_color && ! g:TerminalSpecialMovement  &&  g:event_termdaytimecolor
-let g:DoConfigDependentTerminalConfiguration=function("DoConfigDependentTerminalConfiguration_4")
+let g:DoConfigDependentTerminalConfiguration_stage0=function("DoConfigDependentTerminalConfiguration_stage0_4")
 endif
 if g:term_color && ! g:TerminalSpecialMovement    &&  g:event_termdaytimecolor
-let g:DoConfigDependentTerminalConfiguration=function("DoConfigDependentTerminalConfiguration_5")
+let g:DoConfigDependentTerminalConfiguration_stage0=function("DoConfigDependentTerminalConfiguration_stage0_5")
 endif
 if ! g:term_color && g:TerminalSpecialMovement    &&  g:event_termdaytimecolor
-let g:DoConfigDependentTerminalConfiguration=function("DoConfigDependentTerminalConfiguration_6")
+let g:DoConfigDependentTerminalConfiguration_stage0=function("DoConfigDependentTerminalConfiguration_stage0_6")
 endif
 if g:term_color && g:TerminalSpecialMovement      &&  g:event_termdaytimecolor
-let g:DoConfigDependentTerminalConfiguration=function("DoConfigDependentTerminalConfiguration_7")
+let g:DoConfigDependentTerminalConfiguration_stage0=function("DoConfigDependentTerminalConfiguration_stage0_7")
 endif
 endfunction
+
+"" one time terminal buffer init
+"" only config dependend stuff stage1: setup things used in insertmode
+"" can be called befor actually entering the insertmode
+"" todo: warn if &background of activ is not &background of inactiv
+function! DoConfigDependentTerminalConfiguration_stage1_0()
+endfunction
+function! DoConfigDependentTerminalConfiguration_stage1_1()
+    call Init_TermAktiv_Color()
+endfunction
+function! DoConfigDependentTerminalConfiguration_stage1_2()
+endfunction
+function! DoConfigDependentTerminalConfiguration_stage1_3()
+    call Init_TermAktiv_Color()
+endfunction
+function! DoConfigDependentTerminalConfiguration_stage1_4()
+    call Daytimecolor()
+endfunction
+function! DoConfigDependentTerminalConfiguration_stage1_5()
+    call Init_TermAktiv_Color()
+    call Daytimecolor()
+endfunction
+function! DoConfigDependentTerminalConfiguration_stage1_6()
+    call Daytimecolor()
+endfunction
+function! DoConfigDependentTerminalConfiguration_stage1_7()
+    call Init_TermAktiv_Color()
+    call Daytimecolor()
+endfunction
+
+function! Generate_funktion_DoConfigDependentTerminalConfiguration_stage1()
+if ! g:term_2color && ! g:TerminalSpecialMovement  && ! g:event_termdaytimecolor
+let g:DoConfigDependentTerminalConfiguration_stage1=function("DoConfigDependentTerminalConfiguration_stage1_0")
+endif
+if g:term_2color && ! g:TerminalSpecialMovement    && ! g:event_termdaytimecolor
+let g:DoConfigDependentTerminalConfiguration_stage1=function("DoConfigDependentTerminalConfiguration_stage1_1")
+endif
+if ! g:term_2color && g:TerminalSpecialMovement    && ! g:event_termdaytimecolor
+let g:DoConfigDependentTerminalConfiguration_stage1=function("DoConfigDependentTerminalConfiguration_stage1_2")
+endif
+if g:term_2color && g:TerminalSpecialMovement      && ! g:event_termdaytimecolor
+let g:DoConfigDependentTerminalConfiguration_stage1=function("DoConfigDependentTerminalConfiguration_stage1_3")
+endif
+if ! g:term_2color && ! g:TerminalSpecialMovement  &&  g:event_termdaytimecolor
+let g:DoConfigDependentTerminalConfiguration_stage1=function("DoConfigDependentTerminalConfiguration_stage1_4")
+endif
+if g:term_2color && ! g:TerminalSpecialMovement    &&  g:event_termdaytimecolor
+let g:DoConfigDependentTerminalConfiguration_stage1=function("DoConfigDependentTerminalConfiguration_stage1_5")
+endif
+if ! g:term_2color && g:TerminalSpecialMovement    &&  g:event_termdaytimecolor
+let g:DoConfigDependentTerminalConfiguration_stage1=function("DoConfigDependentTerminalConfiguration_stage1_6")
+endif
+if g:term_2color && g:TerminalSpecialMovement      &&  g:event_termdaytimecolor
+let g:DoConfigDependentTerminalConfiguration_stage1=function("DoConfigDependentTerminalConfiguration_stage1_7")
+endif
+endfunction
+
+
 
 
 function! EventTermEscape_0()       "Event

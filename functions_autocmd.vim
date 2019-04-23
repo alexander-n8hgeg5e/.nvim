@@ -5,6 +5,7 @@ function! VimEnter()
     call Daytimecolor()
     call system("tmux_nvim_update_nvim_listen_addr " . v:servername )
     set cursorline cursorcolumn
+	" new nvim , so update socket file
     call system('e --scan .')
 endfunction
 
@@ -34,69 +35,3 @@ function! AuQuitPre()
                 exe "write " . g:backupdir_unsaved . "/" . strftime("%s") 
         endif
 endfunction
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
