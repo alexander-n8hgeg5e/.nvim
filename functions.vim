@@ -1,0 +1,15 @@
+so $HOME/.config/nvim/functions_utils.vim
+so $HOME/.config/nvim/functions_window_utils.vim
+so $HOME/.config/nvim/functions_window.vim
+so $HOME/.config/nvim/functions_color.vim
+so $HOME/.config/nvim/functions_terminal.vim
+so $HOME/.config/nvim/functions_window_keybinds.vim
+so $HOME/.config/nvim/functions_keybinds.vim
+so $HOME/.config/nvim/functions_autocmd.vim
+so $HOME/.config/nvim/functions_event_notify.vim
+so $HOME/.config/nvim/functions_mutt.vim
+so $HOME/.config/nvim/functions_complete.vim
+so $HOME/.config/nvim/functions_apps.vim
+so $HOME/.config/nvim/functions_mode_netrw.vim
+so $HOME/.config/nvim/functions_exmode.vim
+so $HOME/.config/nvim/functions_tmux.vim

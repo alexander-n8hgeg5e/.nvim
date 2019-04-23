@@ -1,0 +1,10 @@
+*.vimbackup
+**/*.vimbackup
+.netrwhist
+repos/**
+.cache/**
+rplugin/python3/__pycache__/**
+texput.log
+*.vimbackup
+.netrwhist
+NERDTreeBookmark
