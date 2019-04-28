@@ -34,31 +34,18 @@ set showfulltag
 set cscopetag
 set cscopequickfix=s-,c-,d-,i-,t-,e-,a-
 set clipboard=unnamedplus,unnamed
-   " let g:clipboard = {
-   "       \   'name': 'clipster',
-   "       \   'copy': {
-   "       \      '+': 'clipster -c',
-   "       \      '*': 'clipster -p',
-   "       \    },
-   "       \   'paste': {
-   "       \      '+': 'clipster -c -o',
-   "       \      '*': 'clipster -p -o',
-   "       \   },
-   "       \   'cache_enabled': 1,
-   "       \ }
-
-    let g:clipboard = {
-          \   'name': 'myClipboard',
-          \   'copy': {
-          \      '+': {lines, regtype -> extend(g:, {'foo': [lines, regtype]}) },
-          \      '*': {lines, regtype -> extend(g:, {'foo': [lines, regtype]}) },
-          \    },
-          \   'paste': {
-          \      '+': {-> get(g:, 'foo', [])},
-          \      '*': {-> get(g:, 'foo', [])},
-          \   },
-          \ }
-
+let g:clipboard = {
+\   'name': 'c1',
+\   'copy':  {
+\      '+': 'xclip -i -selection secondary',
+\      '*': 'xclip -i',
+\            },
+\   'paste': {
+\      '+': 'xclip -o -selection secondary',
+\      '*': 'xclip -o',
+\            },
+\   'cache_enabled': 1,
+\ }
 set ignorecase
 set autoindent
 set scrolljump=-5
@@ -87,7 +74,7 @@ set timeoutlen=300
 
 "###############   color setup  #########################################################
 " whether have seperate terminal color
-let g:term_color  =  1
+let g:term_color  =  0
 " whether have 2 seperate terminal colors, one aktiv term(insert mode) , one
 " inactive term (not insert mode)
 let g:term_2color =  0
@@ -101,7 +88,6 @@ let g:colorscheme_terminal_dark_fallback = 'paintbox'
 let g:colorscheme_terminal_light_fallback = 'summerfruit'
 " Inverted colors for some feature.
 let g:color_inverted  = 0
-" Go automatically into terminal insert mode when entering terminal window.
 let g:term_active_colorscheme  = 'paintbox'
 let g:term_inactiv_colorscheme = 'paintbox'
 " when new term is created , update the colorscheme according to daytime
@@ -109,27 +95,28 @@ let g:event_termdaytimecolor   =  1
 let g:nowcolors_flavor = 'daytime'
 " setup time of dawn and dusk
 let g:dawntime=6
-let g:dusktime=18
+let g:dusktime=20
 
 " colorscheme notes:
 "  terse: text reading contrast is nice at 9:30 am.
 "            
-"      daytime:           24-3                3-6                 6-9                        9-12                       12-15                    15-18                     18-21        21-24      
-let g:nowcolors_dark   = 'wombat256mod        tender              vividchalk                 xorium                     paintbox                vividchalk                 xian         paintbox
-\                         wombat256mod        tender              vividchalk                 xorium                     paintbox                vividchalk                 xorium       paintbox
-\                         wombat256mod        tender              vividchalk                 xorium                     paintbox                vividchalk                 xorium       paintbox'   
+"      daytime:           24-3       3-6           6-9             9-12          12-15           15-18            18-21           21-24      
+let g:nowcolors_dark   = 'astroboy   mud           vividchalk      chlordane     paintbox       vividchalk        darkeclipse     xorium
+\                         paintbox   3dglasses     vividchalk      gemcolors     paintbox       vividchalk        desertedocean   darkocean 
+\                         zephyr     wombat256mod  vividchalk      darkeclipse   paintbox       vividchalk        paintbox        xoria256m'  
 
-"      daytime:            24-3                3-6              6-9                        9-12                    12-15                   15-18                   18-21        21-24      
-let g:nowcolors_light  =  'summerfruit         summerfruit      summerfruit                summerfruit             peppers                 summerfruit             eclipse      fog           
-\                          beauty              summerfruit      summerfruit                summerfruit             taqua                   summerfruit             newspaper    fog           
-\                          beauty              summerfruit      summerfruit                summerfruit             peppers                 summerfruit             ironman      fog'
+"      daytime:            24-3           3-6       6-9           9-12           12-15            15-18            18-21        21-24      
+let g:nowcolors_light  =  'summerfruit    eclipse   summerfruit   summerfruit    thegoodluck      summerfruit      eclipse      fog           
+\                          beauty         desert    terse         summerfruit    taqua            summerfruit      newspaper    fog           
+\                          beauty         python    colorful      intellij       thegoodluck      summerfruit      ironman      fog'
 
-"      daytime:            24-3                3-6              6-9                       9-12                    12-15                   15-18                   18-21        21-24      
-let g:nowcolors_daytime = 'chlordane           mud              tender                    summerfruit             chela_light             summerfruit             eclipse      fog           
-\                          gemcolors           paintbox         terse                     thegoodluck             taqua                   tender                  desert       tender           
-\                          darkeclipse         wombat256mod     colorful                  intellij                summerfruit             summerfruit             python       paintbox'
-"      daytime_winter:             24-3                3-6              6-9                       9-12                    12-15                   15-18                 18-21          21-24      
-let g:nowcolors_daytime_winter =  'astroboy            mud              tender                    summerfruit             summerfruit             desert                darkeclipse    xorium
-\                                  paintbox            3dglasses        terse                     thegoodluck             taqua                   tender                desertedocean  darkocean 
-\                                  zephyr              wombat256mod     colorful                  intellij                summerfruit             paintbox              paintbox       xoria256m'
+"      daytime:            24-3                3-6              6-9         9-12             12-15             15-18             18-21        21-24      
+let g:nowcolors_daytime = 'chlordane           mud              tender      summerfruit      chela_light       summerfruit       eclipse      fog           
+\                          gemcolors           paintbox         terse       thegoodluck      taqua             tender            desert       tender           
+\                          darkeclipse         wombat256mod     colorful    intellij         summerfruit       summerfruit       python       paintbox'
+
+"      daytime_winter:             24-3         3-6            6-9          9-12           12-15           15-18        18-21          21-24      
+let g:nowcolors_daytime_winter =  'astroboy     mud            tender       summerfruit    summerfruit     desert       darkeclipse    xorium
+\                                  paintbox     3dglasses      terse        thegoodluck    taqua           tender       desertedocean  darkocean 
+\                                  zephyr       wombat256mod   colorful     intellij       summerfruit     paintbox     paintbox       xoria256m'
 "##########################################################################################

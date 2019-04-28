@@ -137,28 +137,32 @@ endfunction
 "" one time terminal buffer init
 "" only config dependend stuff stage0: befor insertmode
 function! DoConfigDependentTerminalConfiguration_stage0_0()
+    call Init_Term_Color()
 endfunction
 function! DoConfigDependentTerminalConfiguration_stage0_1()
-    call Init_TermInaktiv_Color()
+    call Init_TermInactiv_Color()
 endfunction
 function! DoConfigDependentTerminalConfiguration_stage0_2()
+    call Init_Term_Color()
 endfunction
 function! DoConfigDependentTerminalConfiguration_stage0_3()
-    call Init_TermInaktiv_Color()
+    call Init_TermInactiv_Color()
 endfunction
 function! DoConfigDependentTerminalConfiguration_stage0_4()
     call Daytimecolor()
+    call Init_Term_Color()
 endfunction
 function! DoConfigDependentTerminalConfiguration_stage0_5()
-    call Init_TermInaktiv_Color()
     call Daytimecolor()
+    call Init_TermInactiv_Color()
 endfunction
 function! DoConfigDependentTerminalConfiguration_stage0_6()
     call Daytimecolor()
+    call Init_Term_Color()
 endfunction
 function! DoConfigDependentTerminalConfiguration_stage0_7()
-    call Init_TermInaktiv_Color()
     call Daytimecolor()
+    call Init_TermInactiv_Color()
 endfunction
 
 function! Generate_funktion_DoConfigDependentTerminalConfiguration_stage0()
@@ -195,26 +199,22 @@ endfunction
 function! DoConfigDependentTerminalConfiguration_stage1_0()
 endfunction
 function! DoConfigDependentTerminalConfiguration_stage1_1()
-    call Init_TermAktiv_Color()
+    call Init_TermActiv_Color()
 endfunction
 function! DoConfigDependentTerminalConfiguration_stage1_2()
 endfunction
 function! DoConfigDependentTerminalConfiguration_stage1_3()
-    call Init_TermAktiv_Color()
+    call Init_TermActiv_Color()
 endfunction
 function! DoConfigDependentTerminalConfiguration_stage1_4()
-    call Daytimecolor()
 endfunction
 function! DoConfigDependentTerminalConfiguration_stage1_5()
-    call Init_TermAktiv_Color()
-    call Daytimecolor()
+    call Init_TermActiv_Color()
 endfunction
 function! DoConfigDependentTerminalConfiguration_stage1_6()
-    call Daytimecolor()
 endfunction
 function! DoConfigDependentTerminalConfiguration_stage1_7()
-    call Init_TermAktiv_Color()
-    call Daytimecolor()
+    call Init_TermActiv_Color()
 endfunction
 
 function! Generate_funktion_DoConfigDependentTerminalConfiguration_stage1()

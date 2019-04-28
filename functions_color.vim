@@ -53,12 +53,17 @@ function! Init_TermActiv_Color()
     "init func for term creation
     "term buffer has no b:background set yet
     exe "colorscheme"  g:term_active_colorscheme
-    highlight TermCursor ctermfg=16 ctermbg=99  guibg=#000000  guifg=#ff00ff
     exe Set_Subset_Color()
     let b:background=&background
 endfunction
 
-function! Init_TermInaktiv_Color()
+function! Init_Term_Color()
+    "init func for term creation
+    "term buffer has no b:background set yet
+    let b:background=&background
+endfunction
+
+function! Init_TermInactiv_Color()
     "init func for term creation
     "term buffer has no b:background set yet
     exe "colorscheme"  g:term_inactiv_colorscheme

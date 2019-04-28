@@ -5,6 +5,8 @@ function! Mutt()
   let w:mode='mutt'
   call Init_Keybinds_(g:keybinds,'Mutt')
   call SetBuffersMode(3)
+  call g:DoConfigDependentTerminalConfiguration_stage0()
+  call g:DoConfigDependentTerminalConfiguration_stage1()
   set cursorline cursorcolumn
   call Set_NormMode_ColorStyle()
   startinsert
