@@ -7,7 +7,8 @@ function! Mutt()
   call SetBuffersMode(3)
   call g:DoConfigDependentTerminalConfiguration_stage0()
   call g:DoConfigDependentTerminalConfiguration_stage1()
-  set cursorline cursorcolumn
+  set wrap
+  "set cursorline cursorcolumn
   call Set_NormMode_ColorStyle()
   startinsert
 endfunction
@@ -78,38 +79,52 @@ endfunction
 "
 function! MuttWinEnter_0() " Event
   call Set_NormMode_ColorStyle()
+  set sidescrolloff=0
+  set sidescroll=0
   "norm G
 endfunction
 function! MuttWinEnter_1()
   call Set_TermInaktiv_Color()
   call Set_NormMode_ColorStyle()
+  set sidescrolloff=0
+  set sidescroll=0
   "norm G
 endfunction
 function! MuttWinEnter_2()
   call Set_NormMode_ColorStyle()
   call TerminalSpecialMovementUpdateOn()
+  set sidescrolloff=0
+  set sidescroll=0
   "norm G
 endfunction
 function! MuttWinEnter_3()
   call Set_TermInaktiv_Color()
   call Set_NormMode_ColorStyle()
   call TerminalSpecialMovementUpdateOn()
+  set sidescrolloff=0
+  set sidescroll=0
   "norm G
 endfunction
 function! MuttWinEnter_4() " Event
   call Set_NormMode_ColorStyle()
+  set sidescrolloff=0
+  set sidescroll=0
   startinsert
   "norm G
 endfunction
 function! MuttWinEnter_5()
   call Set_TermInaktiv_Color()
   call Set_NormMode_ColorStyle()
+  set sidescrolloff=0
+  set sidescroll=0
   startinsert
   "norm G
 endfunction
 function! MuttWinEnter_6()
   call Set_NormMode_ColorStyle()
   call TerminalSpecialMovementUpdateOn()
+  set sidescrolloff=0
+  set sidescroll=0
   startinsert
   "norm G
 endfunction
@@ -117,6 +132,8 @@ function! MuttWinEnter_7()
   call Set_TermInaktiv_Color()
   call Set_NormMode_ColorStyle()
   call TerminalSpecialMovementUpdateOn()
+  set sidescrolloff=0
+  set sidescroll=0
   startinsert
   "norm G
 endfunction
@@ -152,15 +169,23 @@ endfunction
 
 function! MuttWinLeave_0()
   call Set_NormMode_ColorStyle() 
+    exe "set sidescrolloff=".g:sidescrolloff
+    exe "set sidescroll=".g:sidescroll
 endfunction
 function! MuttWinLeave_1()
   call Set_NormMode_Color()
+    exe "set sidescrolloff=".g:sidescrolloff
+    exe "set sidescroll=".g:sidescroll
 endfunction
 function! MuttWinLeave_2()
   call Set_NormMode_ColorStyle() 
+    exe "set sidescrolloff=".g:sidescrolloff
+    exe "set sidescroll=".g:sidescroll
 endfunction
 function! MuttWinLeave_3()
   call Set_NormMode_Color()
+    exe "set sidescrolloff=".g:sidescrolloff
+    exe "set sidescroll=".g:sidescroll
 endfunction
 
 

@@ -1,45 +1,32 @@
+func! WinIsHigh_t()
+    if ((300.0*winheight(0) )/(100.0*winwidth(0))) > 1
+        return 1
+    else
+        return 0
+    endif
+endfunc
+func! WinIsHigh_b()
+    if ((500.0*winheight(0) )/(100.0*winwidth(0))) > 1
+        return 1
+    else
+        return 0
+    endif
+endfunc
 func! WinIsMostLeft()
-  let oldw = winnr()
-  exe "wincmd h"
-  let neww = winnr()
-  if !(oldw ==# neww)
-    exe oldw.'wincmd p'
-  endif
-  return oldw == neww
+  return winnr() == winnr("h")
 endfunction
 func! WinIsMostRight()
-  let oldw = winnr()
-  exe "wincmd l"
-  let neww = winnr()
-  if !(oldw ==# neww)
-    exe oldw.'wincmd p'
-  endif
-  return oldw == neww
+  return winnr() == winnr("l")
 endfunction
 func! WinIsMostTop()
-  let oldw = winnr()
-  exe "wincmd k"
-  let neww = winnr()
-  if !(oldw ==# neww)
-    exe oldw.'wincmd p'
-  endif
-  return oldw == neww
+  return winnr() == 1
 endfunction
 func! WinIsMostBottom()
-  let oldw = winnr()
-  exe "wincmd j"
-  let neww = winnr()
-  if !(oldw ==# neww)
-    exe oldw.'wincmd p'
-  endif
-  return oldw == neww
+  return winnr() == winnr("j")
 endfunction
 func! TabIsMostRight()
-  let ctab = tabpagenr()
-  let lasttab = tabpagenr("$")
-  return lasttab == ctab
+  return tabpagenr() == tabpagenr("$")
 endfunction
 func! TabIsMostLeft()
-  let ctab = tabpagenr()
-  return 1 ==# ctab
+  return tabpagenr()  ==# 1
 endfunction

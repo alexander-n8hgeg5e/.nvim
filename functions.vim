@@ -10,6 +10,11 @@ so $HOME/.config/nvim/functions_event_notify.vim
 so $HOME/.config/nvim/functions_mutt.vim
 so $HOME/.config/nvim/functions_complete.vim
 so $HOME/.config/nvim/functions_apps.vim
-so $HOME/.config/nvim/functions_mode_netrw.vim
+"so $HOME/.config/nvim/functions_mode_netrw.vim
+so $HOME/.config/nvim/functions_mode_nerdtree.vim
 so $HOME/.config/nvim/functions_exmode.vim
 so $HOME/.config/nvim/functions_tmux.vim
+so $HOME/.config/nvim/functions_smart_tab_complete.vim
+so $HOME/.config/nvim/functions_folding.vim
+so $HOME/.config/nvim/functions_clipboard.vim 
+so $HOME/.config/nvim/functions_shortcuts.vim 

@@ -1,7 +1,10 @@
-function! Create_Terminal_buffer_0()  "means: Action: create one
+function! Create_Terminal_buffer_0(...)  "means: Action: create one
 "       called from default mapping
+"       a:1 cmd
+"       a:2 tmux session name
         stopinsert
-	let isTermMode=(GetBuffersMode() == 1)
+        let b:modified=0
+	let isTermMode=(GetBuffersMode() == 1 || &buftype == "terminal" )
         " get stuff
 	if (len(expand('%:h')) > 0) && ( ! isTermMode )
 		" while %:p may return no path, %:p:h always returns
@@ -10,24 +13,34 @@ function! Create_Terminal_buffer_0()  "means: Action: create one
 	else
 		let cwdname=getcwd()
 	endif
-	let cwdname_clean=substitute(cwdname,'\W','_','g')
-	let tmux_session_name= "nvim_" . localtime() . "_" . cwdname_clean
+	"let cwdname_clean=substitute(cwdname,$HOME . "/" , '' ,'g')
+	"let cwdname_clean=substitute(cwdname_clean,'\W','_','g')
+    if ! exists("a:2")
+    	let tmux_session_name= g:nvim_id ."_". Sub10base_divider_tmux_time( py3eval("'{:.3f}'.format(time())") ,'._','_')
+    else
+        let tmux_session_name=a:2
+    endif
 	let tmux_cmdbase="tmux -S ". g:tmux_socket
 	" check if buffer has a related tmux session and in case
 	" remember that and make a backup of the session name
-	if exists("b:related_tmux_session_name")
+    " if a:1 is used, make always a new session
+	if exists("b:related_tmux_session_name") && ! exists("a:1")
 		call system( tmux_cmdbase ." has-session -t " . b:related_tmux_session_name)
-		let status_has_related_session=$status
-		" backup the session because buffer vars will be away after splitting 
-		" or cleared by term creation
-		let related_tmux_session_name_backup=b:related_tmux_session_name 
+		let status_has_related_session=v:shell_error
+		let tmux_session_name=b:related_tmux_session_name 
 	else
 		let status_has_related_session=1
+	endif
+	let has_related_session=(status_has_related_session==0)
+
+    if !has_related_session
 		" befor splitting record related session name into buffer that will be created
 		" means: relate the buffer to the session name
 		let b:related_tmux_session_name=tmux_session_name
-	endif
-	let has_related_session=(status_has_related_session==0)
+        if exists('b:tmux_session_name')
+		    let g:tmux_session_relations[b:tmux_session_name]=tmux_session_name
+        endif
+    endif
 
 	" no split in case: buffer has: no filename and nothing unsaved and to be sure not mode:Term
 	" (2nd: use &modified option to check)
@@ -44,11 +57,20 @@ function! Create_Terminal_buffer_0()  "means: Action: create one
 	" else create one
 	" decide whether to split window
 	if has_related_session
-			exe "term " . tmux_cmdbase "attach-session -t" related_tmux_session_name_backup
-	                let b:tmux_session_name=related_tmux_session_name_backup
-	else
-			exe "term " . tmux_cmdbase . " new-session -s " . tmux_session_name . " -c " . cwdname . " fish"
+			exe "term " . tmux_cmdbase "attach-session -t" tmux_session_name
 	                let b:tmux_session_name=tmux_session_name
+                    if has_key(g:tmux_session_relations , tmux_session_name )
+                        let b:related_tmux_session_name= g:tmux_session_relations[tmux_session_name]
+                    endif
+	else
+		let a:cmd="term " . tmux_cmdbase . " new-session -s " . tmux_session_name . " -c " . cwdname
+        if exists("a:1")
+            let a:cmd = a:cmd . " " . a:1
+        else
+            let a:cmd = a:cmd . " fish"
+        endif
+        exe a:cmd
+	    let b:tmux_session_name=tmux_session_name
 	endif
 	" set buffervars
 	" buffer vars are would be lost if set earlier
@@ -59,6 +81,8 @@ function! Create_Terminal_buffer_0()  "means: Action: create one
 	" init keybinds
         call Init_Keybinds_(g:keybinds,'TermMode')
         call SetTabName_('Term')
+        set nonumber norelativenumber
+        set wrap
 	" need to run this befor startinsert
 	call g:DoConfigDependentTerminalConfiguration_stage1()
         " this is needed befor terminal creation , colors are selected for background
@@ -131,6 +155,9 @@ endif
 if g:term_color && g:TerminalSpecialMovement     &&   g:term_2color
         let g:EventTermEnter=function("EventTermEnter_7")
 endif
+
+call extend(g:tmux_functions,{ 'ete' : g:EventTermEnter })
+
 endfunction
 
 
@@ -244,7 +271,15 @@ let g:DoConfigDependentTerminalConfiguration_stage1=function("DoConfigDependentT
 endif
 endfunction
 
-
+function! EventTermEscape_256()
+    if exists('b:termcursor')
+        call setpos( '.', b:termcursor )
+    else
+        let col  =  float2nr(winwidth(0)/2)
+        let line = float2nr(winheight(0)/2)
+        call setpos( '.' , [ 0, line  , col , 0 , col ])
+    endif
+endfunction
 
 
 function! EventTermEscape_0()       "Event
@@ -381,37 +416,53 @@ endfunction
 
 function! ConfDep_Event_TermWinEnter_0() " Event
   "norm G
+  set sidescrolloff=0
+  set sidescroll=0
 endfunction
 function! ConfDep_Event_TermWinEnter_1()
   call Set_TermInaktiv_Color()
+  set sidescrolloff=0
+  set sidescroll=0
   "norm G
 endfunction
 function! ConfDep_Event_TermWinEnter_2()
   call TerminalSpecialMovementUpdateOn()
+  set sidescrolloff=0
+  set sidescroll=0
   "norm G
 endfunction
 function! ConfDep_Event_TermWinEnter_3()
   call Set_TermInaktiv_Color()
   call TerminalSpecialMovementUpdateOn()
+  set sidescrolloff=0
+  set sidescroll=0
   "norm G
 endfunction
 function! ConfDep_Event_TermWinEnter_4() " Event
+  set sidescrolloff=0
+  set sidescroll=0
   startinsert
   "norm G
 endfunction
 function! ConfDep_Event_TermWinEnter_5()
   call Set_TermInaktiv_Color()
+  set sidescrolloff=0
+  set sidescroll=0
   startinsert
   "norm G
 endfunction
 function! ConfDep_Event_TermWinEnter_6()
   call TerminalSpecialMovementUpdateOn()
+  set sidescrolloff=0
+  set sidescroll=0
   startinsert
   "norm G
 endfunction
 function! ConfDep_Event_TermWinEnter_7()
   call Set_TermInaktiv_Color()
   call TerminalSpecialMovementUpdateOn()
+  set sidescrolloff=0
+  set sidescroll=0
   startinsert
   "norm G
 endfunction
@@ -447,15 +498,23 @@ endfunction
 
 function! ConfDep_Event_TermWinLeave_0()
   call Set_NormMode_ColorStyle() 
+    exe "set sidescrolloff=".g:sidescrolloff
+    exe "set sidescroll=".g:sidescroll
 endfunction
 function! ConfDep_Event_TermWinLeave_1()
   call Set_NormMode_Color()
+    exe "set sidescrolloff=".g:sidescrolloff
+    exe "set sidescroll=".g:sidescroll
 endfunction
 function! ConfDep_Event_TermWinLeave_2()
   call Set_NormMode_ColorStyle() 
+    exe "set sidescrolloff=".g:sidescrolloff
+    exe "set sidescroll=".g:sidescroll
 endfunction
 function! ConfDep_Event_TermWinLeave_3()
   call Set_NormMode_Color()
+    exe "set sidescrolloff=".g:sidescrolloff
+    exe "set sidescroll=".g:sidescroll
 endfunction
 
 

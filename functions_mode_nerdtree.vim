@@ -1,16 +1,18 @@
-function! CreateNetrwBuffer()
-    "call EventWinLeave()
-    Lexplore
+function! CreateNerdtreeBuffer()
+    call EventWinLeave()
+	NERDTreeToggle
     call SetBuffersMode(5)
-    call Init_Keybinds_(g:keybinds,'NetrwMode')
-    "call EventWinEnter()
+    call Init_Keybinds_(g:keybinds,'NerdtreeMode')
+    call EventNerdtreeWinEnter()
 endfunction
-function! EventNetrwWinEnter()
+
+function! EventNerdtreeWinEnter()
     call SetBuffersMode(5)
-    call Init_Keybinds_(g:keybinds,'NetrwMode')
-    "call EventWinEnter()
+    call Init_Keybinds_(g:keybinds,'NerdtreeMode')
+    "hi CursorLine guibg=#ffff00 guifg=#0000ff
 endfunction
-function! Key_netrw_preview(islocal)
+
+function! Key_Nerdtree_preview(islocal)
     if 0==win_getid(2)
         vsplit
     else
@@ -41,22 +43,22 @@ endfunction
 function! Key_move_to_end_of_word(islocal)
 	call feedkeys('e','n')
 endfunction
-function! Netrw_Create_Dir(islocal)
-	call netrw#Call("NetrwMakeDir","")
+function! Nerdtree_Create_Dir(islocal)
+	call Nerdtree#Call("NerdtreeMakeDir","")
 endfunction
 
-function! Key_Netrw_Quit(islocal)
-    call EventNetrwWinLeave()<CR><Cmd>q<CR><Cmd>call EventWinEnter()<CR>'
+function! Key_Nerdtree_Quit(islocal)
+    call EventNerdtreeWinLeave()<CR><Cmd>q<CR><Cmd>call EventWinEnter()<CR>'
 endfunction
-function! Key_Netrw_reload(islocal)
+function! Key_Nerdtree_reload(islocal)
     call feedkeys("\<C-l>","mt")
 endfunction
-function! Key_Netrw_treeroot(islocal)
+function! Key_Nerdtree_treeroot(islocal)
     call feedkeys("gn","mt")
 endfunction
 
 
-fun! EventNetrwWinLeave()
+fun! EventNerdtreeWinLeave()
 	"todo remove this
-        call Init_Keybinds_(g:keybinds,'DefaultMode')
+        "call Init_Keybinds_(g:keybinds,'DefaultMode')
 endfunction

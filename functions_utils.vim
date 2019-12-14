@@ -5,6 +5,14 @@ function! SetCustomTabName(string)
 endfunction
 
 
+function! CenterSearch()
+  let cmdtype = getcmdtype()
+  if cmdtype == '/' || cmdtype == '?'
+    return "\<enter>zz"
+  endif
+  return "\<enter>"
+endfunction
+
 
 function! SetTabName_(string)
 if !exists("t:customname")
@@ -37,8 +45,8 @@ function! UnhashAll()
 endfunction
 
 
-function! Make_numbers(a,n)
-execute '%substitute/' . a:a . '/\=' . 'printf(''%-3d'', line(''.'')+' . a:n . ')'
+function! Make_numbers(range,placeholder,line_offset )
+execute a:range . 'substitute/' . a:placeholder . '/\=' . 'printf(''%-d'', line(''.'')+' . a:line_offset . ')'
 endfunction
 
 
@@ -107,11 +115,15 @@ function! Insidetermnewterm()
 endfunction
 
 function! Cscopefind(...)
-        if ( a:0 == 0 )
-                call feedkeys(":Cscopefind " .expand("<cword>") . " 1","mt")
-        else
-                exe 'cscope find '  a:000[-1]  join(a:000[0:-2])
-        endif
+	if a:000[0] == 0
+		call feedkeys("\<C-]>","tn")
+    elseif a:000[0] == 11
+	    exe "cscope find  0" a:000[1]
+    elseif a:000[0] == 22
+	    exe "help" a:000[1]
+	else
+	        exe "cscope find"  a:000[0] a:000[1]
+	endif
 endfunction
 
 function! LineBreakAt(bang, ...) range
@@ -184,4 +196,171 @@ endfunction
 fun! ModeDebug( msg )
   let s = [ a:msg ,"bufname",bufname('%'),'bufwinid',bufwinid('%'),"bufwinnr", bufwinnr('%') ]
   echom printf("%10.10S:%1.1S  %12.12S:  %-12.12S %12.12S:  %-12.12S %12.12S:  %-12.12S ", s[0],GetBuffersMode(),s[1],s[2],s[3],s[4],s[5],s[6] )
+endfunction
+
+function! Get_indents()
+    let lastl=getpos("$")[1]
+    let indents = []
+    for line in range( 1 , lastl )
+        call add( indents , indent( line ) )
+    endfor
+    return indents
+endfunction
+
+function! Get_indent_fix_python(indent_width)
+    let indentspace="      "
+    let indents=Get_indents()
+    let lastl=len(indents)
+    let indentlevel=0
+    let levels=[indents[0]]
+    let indenterror = indents[0]  % a:indent_width
+    if indenterror != 0
+        "echo "wrong: " . levels[0] "__" indents[0]
+        let linefix = [ - indenterror ]
+    else
+        let linefix = [ 0 ]
+    endif
+    let fixedlevels = [ indents[0] + linefix[0] ]
+
+    for line in range(2,lastl) "including 1 and lastl
+        let i=line-1
+        call add( linefix, 0 )
+        "echo "line: " . line
+        "echo indentspace "start" levels "[". indentlevel . "] = " indents[i]
+        let ll=len(trim(getline(line)))
+        if indents[i] > levels[indentlevel]
+           "echo "       greater"
+           " setup the levels
+           call add(fixedlevels, fixedlevels[indentlevel] + a:indent_width )
+           let indentlevel += 1
+           call add(levels,indents[i])
+        elseif indents[i] < levels[indentlevel]
+            if ll != 0
+                " unindent to some level ,find it 
+                for j in range(indentlevel , 0 , - 1 )
+                    " search for current unindent
+                    if levels[j] == indents[i]
+                        "found
+                        "echo "unindent to level: "j
+                        let levels=levels[0:j]
+                        let fixedlevels=fixedlevels[0:j]
+                        let indentlevel = j
+                    endif
+                endfor
+                if levels[indentlevel] != indents[i]
+                    " wrong unindent
+                    "echoe indentspace "error: wrong unindent, expected " levels[indentlevel] ", but was " indents[i] " on line" line
+                endif
+            "else
+                    "echo "empty line"
+                    ""do nothing!
+            endif
+        endif
+        " calc error and store fix
+        if ll != 0 
+            let indenterror = indents[i] - fixedlevels[indentlevel]
+        else
+            let indenterror = 0
+        endif
+        if (indenterror != 0)
+               let linefix[i] = - indenterror
+               "echo "linefix: " . linefix[i]
+        endif
+        "echo indentspace "  end" levels "[". indentlevel. "] = " indents[i]
+        "echo " "
+    endfor
+    return linefix
+endfunction
+
+function! Get_fix_python_indent_cmd_list(w)
+    let fixlist=Get_indent_fix_python(a:w)
+    let fixcmdlist=[]
+    for i in range(1,len(fixlist))
+        let fix=fixlist[i-1]
+        if fix > 0
+            call add(fixcmdlist,  i . 's/\v^/' . repeat(" ",fix) . '/' )
+        elseif fix < 0
+            call add(fixcmdlist,  i . 's/\v^[ ]{' . - fix .  '}//')
+        endif
+    endfor
+    return fixcmdlist
+endfunction
+
+
+function! Fix_python_indent( w )
+    let foldenable=&foldenable
+    set nofoldenable
+    for i in Get_fix_python_indent_cmd_list(a:w)
+        "let s="do: ". i. " ?"
+        "call input(s)
+        exe i
+    endfor
+    if foldenable==0
+        set foldenable
+    endif
+endfun
+
+function! Sub10base_divider(b,c,d)
+    return substitute( a:b ,'\(\d\+\)\(\d\{3}\)['.a:c.']','\= Sub10base_divider( submatch(1) . a:d , a:c , a:d )  . submatch(2) . a:d ',"g")
+endfunction
+
+function! Sub10base_divider_tmux_time(b,c,d)
+    return substitute( a:b ,'\(\d\+\)\(\d\{3}\)\(\d\{3}\)['.a:c.']','\= submatch(1) . a:d.a:d . submatch(2) . a:d . submatch(3) .a:d .a:d ', "g" )
+endfunction
+
+
+function! To_log(data)
+  redir! >> /tmp/tmux_control_log
+  echo a:data
+  redir END
+endfunction
+
+function! To_log_on_event(job_id, data, event) dict
+  if a:event == 'stdout'
+    let str = self.shell.' stdout: '.join(a:data)
+  elseif a:event == 'stderr'
+    let str = self.shell.' stderr: '.join(a:data)
+  else
+    let str = self.shell.' exited'
+  endif
+  silent call To_log(str)
+endfunction
+
+function! Echo(a)
+    echo a:a
+endfunction
+
+function! Goo(search_string)
+    let tmux_session_name= g:nvim_id ."_". Sub10base_divider_tmux_time( py3eval("'{:.3f}'.format(time())") ,'._','_')."__"."google"
+    call g:Create_Terminal_buffer( "goo " . a:search_string, tmux_session_name )
+endfunction
+
+function! Get_comment_char()
+    if b:current_syntax == "vim"
+        return '"'
+    elseif b:current_syntax == "tex" || b:current_syntax =="plaintex"
+        return "%"
+    elseif b:current_syntax == "c"
+        return "//"
+    else
+        return '#'
+    endif
+endfunction
+
+function! Find_file_for_includeexpr()
+    let a:path=substitute(getline("."), g:pat_fname ,"\\2", "",)
+    if filereadable(a:path)
+        return a:path
+    else
+        let g:pyvar_includeexpr=a:path
+        py3 exec(pycode['find_file_for_includeexpr']['code'])
+        py3 vim.vars['pyvar_includeexpr']=find_file_for_includeexpr()
+        if g:pyvar_includeexpr != a:path
+            echo g:pyvar_includeexpr
+            return g:pyvar_includeexpr
+        else
+            echo "no"
+            return ""
+        endif
+    endif
 endfunction

@@ -2,50 +2,67 @@
 "
 "
 func! Init_Common_Color()
-    let g:mycolors   =     readfile( $HOME . "/.config/nvim/". g:mycolors_flavor ."_colorschemes" )
     call Daytimecolor()
+    if g:mycolors_flavor == "nowcolors"
+        if g:nowcolors_flavor == "daytime"
+            let a:flavor = g:daytime
+        else
+            let a:flavor = g:nowcolors_flavor
+        endif
+    elseif g:mycolors_flavor == "daytime"
+        let a:flavor = g:daytime
+    else
+        let a:flavor = g:mycolors_flavor
+    endif
+    let g:mycolors   =     readfile( $HOME . "/.config/nvim/". a:flavor ."_colorschemes" )
     exe "colorscheme" g:colorscheme
-    call Set_Subset_Color()
+    call Set_common_cubset_color()
 endfunction
 
 func! Set_NormMode_Color()
     exe "colorscheme" g:colorscheme
-    call Set_Subset_Color()
+    call Set_common_cubset_color()
     call Set_NormMode_ColorStyle()
 endfunction
 
-function! Set_Subset_Color()
+function! Set_common_cubset_color()
         call Set_Common_Split_Color()
         call Set_Common_Tabline_Color()
-        hi    PmenuSel           guifg=#ff00ff  guibg=#00ff00
-        hi    TermCursor         guifg=#ff00ff  guibg=#000000
+        hi    PmenuSel           guifg=#000000  guibg=#00ff00
+        hi    Pmenu              guifg=#ffffff  guibg=#000000
+        highlight TermCursor guibg=#ff3300 guifg=#00ffff ctermfg=cyan ctermbg=red gui=None cterm=None
+        hi    StatusLineTermNC  guifg=#4400ff  guibg=#ffff00
+        highlight StatusLineNC guifg=bg guibg=fg
+        hi    StatusLineTerm    guifg=#4400ff  guibg=#999900
+        hi clear folded
+        hi default folded guifg=#ff0000
 endfunction
 
 function! Set_TermActiv_Color()
     exe "colorscheme"  g:term_active_colorscheme
-    highlight TermCursor ctermfg=16 ctermbg=99  guibg=#000000  guifg=#ff00ff
-    exe Set_Subset_Color()
-    if ! b:background == &background
+    highlight TermCursor guibg=#ff3300 guifg=#00ffff ctermfg=cyan ctermbg=red gui=None cterm=None
+    call Set_common_cubset_color()
+    if b:background != &background
 	    " need to fix the terminal colorscheme
 	    if b:background == "dark"
-	         set g:term_active_colorscheme = g:colorscheme_terminal_dark_fallback
+	         let g:term_active_colorscheme = g:colorscheme_terminal_dark_fallback
             end
 	    if b:background == "light"
-	         set g:term_active_colorscheme = g:colorscheme_terminal_light_fallback
+	         let g:term_active_colorscheme = g:colorscheme_terminal_light_fallback
             end
     end
 endfunction
 
 function! Set_TermInaktiv_Color()
     exe "colorscheme"  g:term_inactiv_colorscheme
-    exe Set_Subset_Color()
-    if ! b:background == &background
+    call Set_common_cubset_color()
+    if b:background != &background
 	    " need to fix the terminal colorscheme
 	    if b:background == "dark"
-	         set g:term_inactiv_colorscheme = g:colorscheme_terminal_dark_fallback
+	         let g:term_inactiv_colorscheme = g:colorscheme_terminal_dark_fallback
             end
 	    if b:background == "light"
-	         set g:term_inactiv_colorscheme = g:colorscheme_terminal_light_fallback
+	         let g:term_inactiv_colorscheme = g:colorscheme_terminal_light_fallback
             end
     end
 endfunction
@@ -53,9 +70,10 @@ function! Init_TermActiv_Color()
     "init func for term creation
     "term buffer has no b:background set yet
     exe "colorscheme"  g:term_active_colorscheme
-    exe Set_Subset_Color()
+    call Set_common_cubset_color()
     let b:background=&background
 endfunction
+
 
 function! Init_Term_Color()
     "init func for term creation
@@ -67,50 +85,55 @@ function! Init_TermInactiv_Color()
     "init func for term creation
     "term buffer has no b:background set yet
     exe "colorscheme"  g:term_inactiv_colorscheme
-    exe Set_Subset_Color()
+    call Set_common_cubset_color()
     let b:background=&background
 endfunction
 
-
-
+     " pattern used below
+     " makes the comment at the end
+     ".,+8s/\v["][ ]{0,2}(["])?([^"]{0,15})[^"]*$/\='"  "'.submatch(2).repeat(" ",(16-len(submatch(2))))."dark"/
+     "clean after the first word and makes the comment
+     "v.,+8s/\v["][ ]{0,2}(["])?([^" ]{0,15})[^"]*$/\='"  "'.submatch(2).repeat(" ",(16-len(submatch(2))))."default colors"/
 function! Set_Term_Colors_Dark()
-     let g:terminal_color_0      =      "#000000" "black
-     let g:terminal_color_1      =      "#9f0000"
-     let g:terminal_color_2      =      "#009f00"
-     let g:terminal_color_3      =      "#ffff00"
-     let g:terminal_color_4      =      "#5555ff"
-     let g:terminal_color_5      =      "#ff00ff"
-     let g:terminal_color_6      =      "#00ffff"
-     let g:terminal_color_7      =      "#f1f1f1" "white
+     let g:terminal_color_0      =      "#000000"  "black                  default colors
+     let g:terminal_color_1      =      "#ff0505"  "red                    default colors
+     let g:terminal_color_2      =      "#00d000"  "green                  default colors
+     let g:terminal_color_3      =      "#c4c400"  "yellow                 default colors
+     let g:terminal_color_4      =      "#b0b0ff"  "blue                   default colors
+     let g:terminal_color_5      =      "#ff00ff"  "magenta                default colors
+     let g:terminal_color_6      =      "#00d0d0"  "cyan                   default colors
+     let g:terminal_color_7      =      "#ffffff"  "white                  default colors
 
-     let g:terminal_color_8      =      "#040404" "light black
-     let g:terminal_color_9      =      "#ff8080"
-     let g:terminal_color_10     =      "#80ff80"
-     let g:terminal_color_11     =      "#ffff80"
-     let g:terminal_color_12     =      "#8080ff"
-     let g:terminal_color_13     =      "#ff80ff"
-     let g:terminal_color_14     =      "#80ffff"
-     let g:terminal_color_15     =      "#ffffff" "light white
+     let g:terminal_color_8      =      "#040404"  "light black           intense, means more bright
+     let g:terminal_color_9      =      "#ff8080"  "light red             intense, means more bright
+     let g:terminal_color_10     =      "#80ff80"  "light green           intense, means more bright
+     let g:terminal_color_11     =      "#ffff00"  "light yellow          intense, means more bright
+     let g:terminal_color_12     =      "#c0c0ff"  "light blue            intense, means more bright
+     let g:terminal_color_13     =      "#ff80ff"  "light magenta         intense, means more bright
+     let g:terminal_color_14     =      "#80ffff"  "light cyan            intense, means more bright
+     let g:terminal_color_15     =      "#ffffff"  "white                 intense, means more bright
 endfunction
+
 function! Set_Term_Colors_Light()
-     let g:terminal_color_0      =      "#000000"  "black
-     let g:terminal_color_1      =      "#800000"  "red
-     let g:terminal_color_2      =      "#008000"  "green
-     let g:terminal_color_3      =      "#454500"  
-     let g:terminal_color_4      =      "#1515ff"
-     let g:terminal_color_5      =      "#800080"
-     let g:terminal_color_6      =      "#008080"
-     let g:terminal_color_7      =      "#010101"  "white
+     let g:terminal_color_0      =      "#ffffff"  "white           default colors
+     let g:terminal_color_1      =      "#ff0000"  "red             default colors
+     let g:terminal_color_2      =      "#008f00"  "green           default colors
+     let g:terminal_color_3      =      "#9a9a00"  "yellow          default colors
+     let g:terminal_color_4      =      "#7070ff"  "blue            default colors
+     let g:terminal_color_5      =      "#ff00ff"  "magenta         default colors
+     let g:terminal_color_6      =      "#00bbbb"  "cyan            default colors
+     let g:terminal_color_7      =      "#000000"  "black           default colors
                                                    
-     let g:terminal_color_8      =      "#666666"  "light black
-     let g:terminal_color_9      =      "#ff5050"  "light red
-     let g:terminal_color_10     =      "#009a00"  "light green
-     let g:terminal_color_11     =      "#666600"  
-     let g:terminal_color_12     =      "#5555ff"
-     let g:terminal_color_13     =      "#ff00ff"
-     let g:terminal_color_14     =      "#00ffff"
-     let g:terminal_color_15     =      "#000000"  "light white
-     let g:terminal_color_234    =      "#000000"
+     let g:terminal_color_8      =      "#505050"  "dark white      intense, means darker here
+     let g:terminal_color_9      =      "#9f0000"  "dark red        intense, means darker here
+     let g:terminal_color_10     =      "#008000"  "dark green      intense, means darker here
+     let g:terminal_color_11     =      "#555500"  "dark yellow     intense, means darker here
+     let g:terminal_color_12     =      "#5555ff"  "dark blue       intense, means darker here
+     let g:terminal_color_13     =      "#bb00bb"  "dark magenta    intense, means darker here
+     let g:terminal_color_14     =      "#00cccc"  "dark cyan       intense, means darker here
+     let g:terminal_color_15     =      "#000000"  "dark black      intense, means darker here
+
+     let g:terminal_color_234    =      "#000000"  
      let g:terminal_color_235    =      "#000000"
      let g:terminal_color_236    =      "#000000"
      let g:terminal_color_237    =      "#000000"
@@ -145,33 +168,16 @@ endfunction
 
 func! Set_InsMode_ColorStyle()
   if &modified
-        execute "highlight Cursor          gui=reverse"
-        execute "highlight CursorColumn    guifg=#000000 guibg=#00dfff"
-        execute "highlight CursorLine      guifg=#000000 guibg=#ff00ff"
-        execute "highlight StatusLine      guifg=#ff00ff guibg=#00dfff"
-        execute "highlight StatusLineNC    guifg=#ffffff guibg=#000000"
+                 highlight StatusLine      guifg=#ff0000 guibg=#00aaaa gui=None
   else
-        execute "highlight Cursor          gui=reverse"
-        execute "highlight CursorColumn    guibg=#00dfff guifg=#000000 "
-        execute "highlight CursorLine      guibg=#00dfff guifg=#000000"
-        execute "highlight StatusLine      guifg=#000000 guibg=#00dfff"
-        execute "highlight StatusLineNC    guifg=#ffffff guibg=#000000"
+                 highlight StatusLine      guifg=#000000 guibg=#00aaaa gui=None
   endif
 endfunction
 func! Set_NormMode_ColorStyle()
   if &modified
-        execute "highlight Cursor          gui=reverse"
-        execute "highlight CursorColumn    guifg=#000000 guibg=#00ff00"
-        execute "highlight StatusLine      guifg=#ff00ff guibg=#00ff00"
-        execute "highlight CursorLine      guifg=#000000 guibg=#ff00ff"
-        execute "highlight StatusLine      guifg=#ff00ff guibg=#00dfff"
-        execute "highlight StatusLineNC    guifg=#ffffff guibg=#000000"
+                 highlight StatusLine        guifg=#00ff00 guibg=#ff0000 gui=None
   else
-        execute "highlight Cursor          gui=reverse"
-        execute "highlight CursorColumn    guifg=#000000 guibg=#00ff00"
-        execute "highlight CursorLine      guifg=#000000 guibg=#00ff00"
-        execute "highlight StatusLine      guifg=#000000 guibg=#00ff00"
-        execute "highlight StatusLineNC    guifg=#ffffff guibg=#000000"
+                 highlight StatusLine       guifg=#000000 guibg=#00bf00 gui=None
   endif
 endfunction
 
@@ -180,7 +186,7 @@ endfunction
 
 
 function! Set_Common_Split_Color()
-        execute "hi VertSplit ctermfg=16 ctermbg=99  guibg=#875fff  guifg=#ffffff gui=NONE cterm=NONE"
+    hi VertSplit ctermfg=16 ctermbg=99  guibg=#875fff  guifg=#ffffff gui=NONE cterm=NONE
 endfunction
 
 
@@ -193,69 +199,6 @@ endfunction
 
 "###########################################################################################################################################################
 
-func! Set_InsMode_ColorStyle_2()
-  if &modified
-        execute "highlight Cursor          gui=reverse"
-        execute "highlight CursorColumn    guifg=#000000 guibg=#00dfff"
-        execute "highlight CursorLine      guifg=#000000 guibg=#ff00ff"
-        execute "highlight StatusLine      guifg=#ff00ff guibg=#00dfff"
-        execute "highlight StatusLineNC    guifg=#ffffff guibg=#000000"
-  else
-        execute "highlight Cursor          gui=reverse"
-        execute "highlight CursorColumn    guibg=#00dfff guifg=#000000 "
-        execute "highlight CursorLine      guibg=#00dfff guifg=#000000"
-        execute "highlight StatusLine      guifg=#000000 guibg=#00dfff"
-        execute "highlight StatusLineNC    guifg=#ffffff guibg=#000000"
-  endif
-endfunction
-func! Set_NormMode_ColorStyle_()
-  if &modified
-        execute "highlight Cursor          gui=reverse"
-        execute "highlight CursorColumn    guifg=#000000 guibg=#00ff00"
-        execute "highlight StatusLine      guifg=#ff00ff guibg=#00ff00"
-        execute "highlight CursorLine      guifg=#000000 guibg=#ff00ff"
-        execute "highlight StatusLine      guifg=#ff00ff guibg=#00dfff"
-        execute "highlight StatusLineNC    guifg=#ffffff guibg=#000000"
-  else
-        execute "highlight Cursor          gui=reverse"
-        execute "highlight CursorColumn    guifg=#000000 guibg=#00ff00"
-        execute "highlight CursorLine      guifg=#000000 guibg=#00ff00"
-        execute "highlight StatusLine      guifg=#000000 guibg=#00ff00"
-        execute "highlight StatusLineNC    guifg=#ffffff guibg=#000000"
-  endif
-endfunction
-
-func! Set_InsMode_ColorStyle_1()
-  if &modified
-        execute "highlight Cursor          gui=reverse"
-        execute "highlight CursorColumn    guifg=#000000 guibg=#00dfff"
-        execute "highlight CursorLine      guifg=#000000 guibg=#ff00ff"
-        execute "highlight StatusLine      guifg=#ff00ff guibg=#00dfff"
-        execute "highlight StatusLineNC    guifg=#ffffff guibg=#000000"
-  else
-        execute "highlight Cursor          gui=reverse"
-        execute "highlight CursorColumn    guibg=#00dfff guifg=#000000 "
-        execute "highlight CursorLine      guibg=#00dfff guifg=#000000"
-        execute "highlight StatusLine      guifg=#000000 guibg=#00dfff"
-        execute "highlight StatusLineNC    guifg=#ffffff guibg=#000000"
-  endif
-endfunction
-func! Set_NormMode_ColorStyle1()
-  if &modified
-        execute "highlight Cursor          gui=reverse"
-        execute "highlight CursorColumn    guifg=#000000 guibg=#00ff00"
-        execute "highlight StatusLine      guifg=#ff00ff guibg=#00ff00"
-        execute "highlight CursorLine      guifg=#000000 guibg=#ff00ff"
-        execute "highlight StatusLine      guifg=#ff00ff guibg=#00dfff"
-        execute "highlight StatusLineNC    guifg=#ffffff guibg=#000000"
-  else
-        execute "highlight Cursor          gui=reverse"
-        execute "highlight CursorColumn    guifg=#000000 guibg=#00ff00"
-        execute "highlight CursorLine      guifg=#000000 guibg=#00ff00"
-        execute "highlight StatusLine      guifg=#000000 guibg=#00ff00"
-        execute "highlight StatusLineNC    guifg=#ffffff guibg=#000000"
-  endif
-endfunction
 
 function! Generate_function_Set_NormMode_ColorStyle()
 if ! g:color_inverted
@@ -281,7 +224,8 @@ function! Set_Common_Split_Color()
 endfunction
 
 function! Daytimecolor()
-  let hr = str2nr(strftime('%H'))
+  let hr = str2float(strftime('%H'))
+  "let hr = str2float(strftime('%H')) + str2float(strftime('%M'))/60
   "set c 0;for i in (seq 1 8);for j in 0 8 16 ;set c (math $c + 1); echo '  elseif hr <= '$c;echo "    let i = "(math $j + $i );echo $i $j;end;end
   if hr <= 1
     let i = 0
@@ -333,26 +277,58 @@ function! Daytimecolor()
     let i = 23
   endif
   if g:nowcolors_flavor == "daytime"
-	  if (hr >= g:dawntime) && (hr < g:dusktime)
+    if (hr >= g:dawntime + g:wait_for_day ) && ( hr < g:dusktime - g:preempt_dusk )
+	    if (hr >= g:dawntime + g:no_bright_light_morning ) && ( hr < g:dusktime - g:no_bright_light_evening )
+                  let nc  =  "g:nowcolors_bright_light"
+                  let g:daytime="bright_light"
+        else
                   let nc  =  "g:nowcolors_light"
-	  else
-                  let nc  =  "g:nowcolors_dark"
-	  endif
+                  let g:daytime="light"
+        endif
+        call Set_Term_Colors_Light()
+	else
+	    if (hr >= g:dusktime + g:wait_for_night ) && ( hr < g:dawntime - g:preempt_dawn )
+                let nc ="g:nowcolors_dark"
+                let g:daytime="dark"
+        else
+                let nc ="g:nowcolors_medium_dark"
+                let g:daytime="medium_dark"
+        endif
+            call Set_Term_Colors_Dark()
+	endif
   else
           let nc  =     "g:nowcolors_" . g:nowcolors_flavor
   endif
-  let g:colorscheme = split(eval(nc))[i]
+  let g:python_var_0=split(eval(nc))[i]
+  let counter=0
+  while ! (py3eval("exists(vim.vars['python_var_0'])") || counter > 23 )
+    let i+=1
+    let counter+=1
+    if i>23
+      let i=0
+    endif
+    let g:python_var_0=split(eval(nc))[i]
+  endwhile
+  let g:colorscheme=g:python_var_0
+  let g:colorscheme_terminal_dark_fallback  = split(g:nowcolors_dark )[i]
+  let g:colorscheme_terminal_light_fallback = split(g:nowcolors_light)[i]
   exe "colorscheme" g:colorscheme
-  call Set_Subset_Color()
+  call Set_common_cubset_color()
 endfunction
 
 
 
 function! Set_Common_Tabline_Color()
-   hi    TabLineSel              ctermfg=16  ctermbg=99  guifg=#ffff00  guibg=#55aaff
+   hi    TabLineSel              ctermfg=16  ctermbg=99  guifg=#cc9900  guibg=#00358a
    hi    TabLineFill             ctermfg=16  ctermbg=99  guibg=#000000  guifg=#000000
    hi    TabLine                 ctermfg=16  ctermbg=99  guibg=#000000  guifg=#ffffff
 endfunction
 
 
 "###########################################################################################################################################################
+"
+" Add highlighting for function definition
+function! EnhanceCppSyntax()
+  syn match cppFuncDef '\v^\s?(\w+\s+)?\w+\(+.*\)+'
+  hi def link cppFuncDef Special
+endfunction

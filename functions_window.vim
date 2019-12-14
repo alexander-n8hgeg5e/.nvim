@@ -28,7 +28,7 @@ endfunction
 func! GoUp()
   stopinsert
   if WinIsMostTop()
-    if WinIsMostBottom()
+    if WinIsHigh_t()
       exe "leftabove new"
     else
       exe "rightbelow vnew"
@@ -40,7 +40,7 @@ endfunction
 func! GoDown()
   stopinsert
   if WinIsMostBottom()
-    if WinIsMostTop()
+    if WinIsHigh_b()
       exe "rightbelow new"
     else
       exe "rightbelow vnew"

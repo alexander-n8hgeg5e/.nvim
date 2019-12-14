@@ -1,11 +1,15 @@
 "############# nvim config settings ####################################################
-set runtimepath+=/usr/share/vim/vimfiles/
+if "empty"==system(['bash','-c','[[ ${EPREFIX} = "" ]]&&echo -n empty' ])
+    set runtimepath+=/usr/share/vim/vimfiles
+else
+    set runtimepath+=${EPREFIX}/usr/share/vim/vimfiles
+endif
 set synmaxcol=300
 set termguicolors
 "backup
 exe "set undodir=" . expand("$HOME") . "/.vimundo"
 exe "set backupdir=" . expand("$HOME") . "/.vimbackup"
-set backupext=.vimbackup
+    set backupext=.vimbackup
 let g:backupdir_unsaved= &backupdir . "/unsaved"
 let $b=g:backupdir_unsaved
 set writebackup
@@ -16,61 +20,132 @@ set number
 set undofile
 set confirm
 set mouse=a
+
 set nowrap
+set linebreak
+set wrapmargin=0
+set textwidth=0
+set breakat=\ ^I!@*-+;:,./?
+set breakindent
+set showbreak=<<<wrap>>>            ․․․>>>․․․
+let s:minimum=len(&showbreak)+20
+exe "set breakindentopt=min:".s:minimum.",shift:250"
+
+set conceallevel=1
+set listchars=tab:┈\ ,trail:…,nbsp:˽,conceal:․,extends:→,precedes:←,eol:↙
+" … ‥ ․ . ⣀  ← →
+" tab/indent/space settings
+set smarttab
+set expandtab
+set tabstop=4
+set shiftwidth=4
+
+function! Status_line_modified()
+    if &modified
+        return "                                             "
+    endif
+    return ""
+endfunction
+function! Status_line_not_modified()
+    if ! &modified
+        return " "
+    endif
+    return ""
+endfunction
+
+set statusline=%<%f\ %h%=%#Error#%{Status_line_modified()}%#PMenuSel#%{Status_line_not_modified()}%*%r%=%-14.(%l,%c%V%)\ %P
+set laststatus=2
+set helpheight=100 
 set mousehide
 set relativenumber
 set number
 set nohlsearch
 set sessionoptions=globals,options,localoptions,blank,buffers,curdir,folds,help,tabpages,winsize
+
+" folding
+set foldmethod=indent
+set foldopen=block,hor,insert,jump,mark,percent,quickfix,search,tag,undo
+set foldclose=
+set fillchars=fold:\ 
+set foldnestmax=20
+set foldminlines=1
+set foldignore='#'
+set foldlevelstart=99
+set foldmarker={{{,}}}
+set foldtext=Foldtext()
+
+set diffopt=internal,filler,vertical,indent-heuristic,algorithm:histogram
+
 filetype plugin on
 filetype plugin indent on
-set omnifunc=syntaxcomplete#Complete
-set completefunc=Complete_em_all
+set synmaxcol=400
+"set completefunc=Smart_TabComplete
 set completeopt=noinsert,menuone,preview
-set complete=".,w,b,u,U,t,kspell"
-set cpoptions=BesI_y
-"set cpoptions=aABceFs
+set complete=.,w,b,u,U,t,kspell
+set cpoptions=
+set iskeyword=a-z,A-Z,48-57,_,-
+set keywordprg="man -s"
 set showfulltag
 set cscopetag
-set cscopequickfix=s-,c-,d-,i-,t-,e-,a-
+set nocscoperelative
+set cscopepathcomp=2
+set cscopetagorder=1
+"set cscopequickfix=s+,c+,d+,i+,t+,e+,a+
+"set cscopequickfix=s-,c-,d-,i-,t-,e-,a-
+set cscopequickfix=
+
+"let pat_fname='\v^.*(\s|\W|^)(([/]?(\w|(\$[{]?\w+[}]?)|[~]?|[.-]))+)(\W|\s|$).*$'
+let pat_fname='\v^.*(\s|[^-0-9a-zA-Z/.~{}]|^)(([/]?(\w|\d|(\$[{]?\w+[}]?)|[-~.]))+).*$'
+"let pat_fname=escape(pat_fname," \"'|\\")
+"let includeexpr='substitute(getline("."),"'. pat_fname .'","\\2", "",)'
+"let includeexpr=escape(includeexpr," \"'|\\")
+"exe "set includeexpr=".includeexpr
+set isfname=@,48-57,/,.,-,_,+,$,~,{,}
+set includeexpr=Find_file_for_includeexpr()
 set clipboard=unnamedplus,unnamed
-let g:clipboard = {
-\   'name': 'c1',
-\   'copy':  {
-\      '+': 'xclip -i -selection secondary',
-\      '*': 'xclip -i',
-\            },
-\   'paste': {
-\      '+': 'xclip -o -selection secondary',
-\      '*': 'xclip -o',
-\            },
-\   'cache_enabled': 1,
-\ }
+
+set lazyredraw
 set ignorecase
 set autoindent
-set scrolljump=-5
-set sidescroll=5
-set sidescrolloff=5
-set scrolloff=5
+set scrolloff=2
+set scrolljump=5
+let g:sidescroll=5
+let g:sidescrolloff=15
 set nosmartindent 
 set belloff=all
 set eadirection=both
 set cmdheight=4
 set cmdwinheight=40
-set equalalways
+set noequalalways
 set shortmess=aAtT
-set more
+set nomore
 set splitright
 set splitbelow
 set noautochdir
-set cursorline cursorcolumn
-"terminal_double_keycode_timeout
+"set cursorline cursorcolumn
+
+"###  timeouts ###
 set ttimeout
 set ttimeoutlen=5
-"double keypress mapping timeout
 set timeout
-set timeoutlen=300
+set timeoutlen=500
+"#################
+
+"let g:ft_ignore_pat = '\.\(Z\|gz\|bz2\|zip\|tgz\)$'
+"let g:ft_ignore_pat = '.*'
 "############################################
+
+"###  terminal
+"####################################################################
+let g:TerminalSpecialMovement  =  0
+let g:option_terminal_buffhidden = 'unload'
+let g:TerminalAutoGoIn = 1
+let g:last_complete=0
+"tmux and terminal vars
+let g:tmux_socket_dir= "/tmp/tmux-" . trim(system("id -u"))
+call system("mkdir -p " . tmux_socket_dir)
+let g:tmux_socket= tmux_socket_dir . '/' . trim(system("hostname")) . "_1"
+"######################
 
 "###############   color setup  #########################################################
 " whether have seperate terminal color
@@ -80,43 +155,63 @@ let g:term_color  =  0
 let g:term_2color =  0
 " colorscheme if nothing else fancy is activated
 let g:colorscheme = 'paintbox'
-" color flavor used if nothing else is activated
-let g:mycolors_flavor  = 'dark'
+
 " fallback colorschemes in case terminal colorscheme is not compatible with
 " terminal colors of the running terminal app. Need two of them.
 let g:colorscheme_terminal_dark_fallback = 'paintbox'
 let g:colorscheme_terminal_light_fallback = 'summerfruit'
 " Inverted colors for some feature.
 let g:color_inverted  = 0
-let g:term_active_colorscheme  = 'paintbox'
-let g:term_inactiv_colorscheme = 'paintbox'
-" when new term is created , update the colorscheme according to daytime
-let g:event_termdaytimecolor   =  1 
-let g:nowcolors_flavor = 'daytime'
+let g:term_active_colorscheme  = 'prmths'
+let g:term_inactiv_colorscheme = 'thegoodluck'
+" when new term is created and g:event_termdaytimecolor is set
+" update following colorschemes:
+"  g:term_inactiv_colorscheme
+"  g:colorscheme
+"  g:colorscheme_terminal_light_fallback
+"  g:colorscheme_terminal_dark_fallback
+"  additional if is set term color in set 
+"  in g:term_inactive_colorscheme is no longer static
+let g:event_termdaytimecolor   =  1
+let g:nowcolors_flavor = 'dark'
+let g:mycolors_flavor  = 'nowcolors'
 " setup time of dawn and dusk
-let g:dawntime=6
-let g:dusktime=20
+
+let g:wait_for_day=1
+let g:wait_for_night=3
+let g:no_bright_light_morning=3
+let g:no_bright_light_evening=0.3
+let g:preempt_dawn=4
+let g:preempt_dusk=1
+let g:coords={"latitude" : 49, "longitude" : 8.375 }
+
 
 " colorscheme notes:
 "  terse: text reading contrast is nice at 9:30 am.
+"  accidentially triggered colorschemes that looked attractive: smp 
 "            
-"      daytime:           24-3       3-6           6-9             9-12          12-15           15-18            18-21           21-24      
-let g:nowcolors_dark   = 'astroboy   mud           vividchalk      chlordane     paintbox       vividchalk        darkeclipse     xorium
-\                         paintbox   3dglasses     vividchalk      gemcolors     paintbox       vividchalk        desertedocean   darkocean 
-\                         zephyr     wombat256mod  vividchalk      darkeclipse   paintbox       vividchalk        paintbox        xoria256m'  
+"      bright light:                    24-3           3-6          6-9           9-12           12-15            15-18            18-21        21-24      
+let g:nowcolors_bright_light =         'summerfruit    eclipse      summerfruit   mickeysoft     thegoodluck      tango-morning    eclipse      fog
+\                                       beauty         PapayaWhip   terse         summerfruit    habiLight        scite            newspaper    fog
+\                                       PapayaWhip     PapayaWhip   colorful      tcsoft         mellow           mellow           ironman      fog'
 
-"      daytime:            24-3           3-6       6-9           9-12           12-15            15-18            18-21        21-24      
-let g:nowcolors_light  =  'summerfruit    eclipse   summerfruit   summerfruit    thegoodluck      summerfruit      eclipse      fog           
-\                          beauty         desert    terse         summerfruit    taqua            summerfruit      newspaper    fog           
-\                          beauty         python    colorful      intellij       thegoodluck      summerfruit      ironman      fog'
+"      light:                           24-3           3-6          6-9           9-12           12-15            15-18            18-21        21-24      
+let g:nowcolors_light =                'fog            codepaper    biogoo        nuvola         thegoodluck      tango-morning    carrot       fog
+\                                       habiLight      PapayaWhip   terse         orange         habiLight        MountainDew      newspaper    fog
+\                                       PapayaWhip     PapayaWhip   colorful      intellij       thegoodluck      scite            ironman      fog'
 
-"      daytime:            24-3                3-6              6-9         9-12             12-15             15-18             18-21        21-24      
-let g:nowcolors_daytime = 'chlordane           mud              tender      summerfruit      chela_light       summerfruit       eclipse      fog           
-\                          gemcolors           paintbox         terse       thegoodluck      taqua             tender            desert       tender           
-\                          darkeclipse         wombat256mod     colorful    intellij         summerfruit       summerfruit       python       paintbox'
+"      medium dark:                    24-3       3-6           6-9             9-12          12-15           15-18            18-21           21-24      
+let g:nowcolors_medium_dark  =        'astroboy   mushroom      vividchalk      chlordane     cobaltish      vividchalk        gor             xorium
+\                                      atom       3dglasses     vividchalk      wolfpack      bwn            vividchalk        desertedocean   darkocean
+\                                      wolfpack   wombat256mod  astroboy        darkeclipse   atom           asu1dark          tabula          xoria256m'
 
-"      daytime_winter:             24-3         3-6            6-9          9-12           12-15           15-18        18-21          21-24      
-let g:nowcolors_daytime_winter =  'astroboy     mud            tender       summerfruit    summerfruit     desert       darkeclipse    xorium
-\                                  paintbox     3dglasses      terse        thegoodluck    taqua           tender       desertedocean  darkocean 
-\                                  zephyr       wombat256mod   colorful     intellij       summerfruit     paintbox     paintbox       xoria256m'
+"      dark:                           24-3       3-6           6-9             9-12          12-15           15-18            18-21           21-24      
+let g:nowcolors_dark   =              'astroboy   mushroom      vividchalk      chlordane     paintbox       vividchalk        darkeclipse     xorium
+\                                      oceandeep  3dglasses     oceandeep       wolfpack      camo           wintersday        desertedocean   darkocean
+\                                      wolfpack   wombat256mod  astroboy        darkeclipse   paintbox       vividchalk        paintbox        xoria256m'
+
+"      dark:                           24-3       3-6           6-9             9-12          12-15           15-18            18-21           21-24      
+let g:nowcolors_dark2  =              'astroboy   mushroom      baobaozhu       chlordane     paintbox       vividchalk        darkeclipse     xorium
+\                                      oceandeep  3dglasses     oceandeep       wolfpack      camo           wintersday        desertedocean   darkocean
+\                                      wolfpack   wombat256mod  astroboy        darkeclipse   paintbox       vividchalk        paintbox        xoria256m'
 "##########################################################################################

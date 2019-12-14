@@ -16,14 +16,14 @@ fun! EventExModeWinLeave()
 	"" call only directly from keybinding
 
      let g:mode=GetBuffersMode()
-     set nocursorline nocursorcolumn
+     "set nocursorline nocursorcolumn
 endfunction
 
 function! EventExModeWinEnter()
 	"" ex mode event is not intended to be called from EventWinEnter ,
 	"" call only directly from keybinding
-
 	if ! (GetBuffersMode()==2)
+             let b:modified=0
              call Init_Keybinds_(g:keybinds,'ExMode')
 	call SetBuffersMode(2)
         endif
@@ -32,7 +32,7 @@ function! EventExModeWinEnter()
         let g:mode=GetBuffersMode()
         call EventFindWinEnter(oldmode, g:mode )
         silent call Set_NormMode_ColorStyle()
-        set cursorline cursorcolumn
+        "set cursorline cursorcolumn
         call Set_InsMode_ColorStyle()
         startinsert
 endfunction

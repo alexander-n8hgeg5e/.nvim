@@ -9,3 +9,7 @@ texput.log
 .netrwhist
 NERDTreeBookmark
 p.vim
+NERDTreeBookmark
+tags
+__pycache__
+daytimeconf.vim

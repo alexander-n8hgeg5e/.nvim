@@ -1,1 +1,0 @@
-/home/esadman/code/YankRing.vim/plugin/yankring.vim
