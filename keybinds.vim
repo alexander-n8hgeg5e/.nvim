@@ -220,9 +220,10 @@ call extend( g:keybinds, additonal_keybinds )
 
 let additonal_keybinds = {
 \ '<Esc>___i___Common'                      :                   [ '*'   ,     '<Esc><Right>'],
-\ '#___v___Common'                      :                   [ '*<expr>'   ,     '"<S-i>".Get_comment_char()."<Esc>"'],
+\ '#___v___Common'                          :                   [ '*<expr>'   ,     '"<S-i>".Get_comment_char()."<Esc>"'],
+\ '<Space>___v___Common'                    :                   [ '*<expr>'   ,     '"<S-i>".Get_space("<v:count>")."<Esc>"'],
 \ '<Tab>___v___Common'                      :                   [ '*'   ,     '<S-i><Tab><Esc>'],
-\ 'v___n___Common'                      :                   [ '*'   ,     '<C-v>'],
+\ 'v___n___Common'                          :                   [ '*'   ,     '<C-v>'],
 \ '<C-v>___n___Common'                      :                   [ '*'   ,     'v'],
 \ '<F18>___v___Common'                      :                   [ '*'   ,     'c#<Esc>'],
 \ '<F18>___n___Common'                      :                   [ '*'   ,     '<C-v>c#<Esc>'],
@@ -361,7 +362,7 @@ let additonal_keybinds = {
 \ '<LeftMouse>___c___Common'                :                   [    '*'    ,    '<Esc>'   ],
 \ '<F3>___ ___Common'                       :                   [    '*'    ,    'nzz'   ],
 \ '<CR>___ ___Common'                       :                   [    '*'    ,    '<C-]>zz'   ],
-\ '<Space>___ ___Common'                    :                   [    '*'    ,    '<Cmd>call Cscopefind(str2nr( v:count) , expand("<cword>")) <CR>zz'   ],
+\ '<Space>___no___Common'                    :                   [    '*'    ,    '<Cmd>call Cscopefind(str2nr( v:count) , expand("<cword>")) <CR>zz'   ],
 \ '<C-U>___n___Common'                      :                   [    '*'    ,    '<C-R>'   ],
 \ '<C-Up>___no___Common'                    :                   [    '*'    ,    '<Cmd>call EventWinLeave()<CR><Cmd>call GoUp()<CR><Cmd>call EventWinEnter()<CR>'   ],
 \ '<Left>___ ___Common'                     :                   [    '*'    ,    'zvh'   ],
@@ -500,3 +501,4 @@ let additonal_keybinds = {
 \ ',___ ___Common'                          :                   [    '*'    ,    '<C-O>'   ],
 \}
 call extend( g:keybinds, additonal_keybinds )
+"  vim: set nowrap :

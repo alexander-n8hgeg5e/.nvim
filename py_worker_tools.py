@@ -136,4 +136,4 @@ class Py_worker_pool(dict):
         for v in self.values():
             v.kill()
 
-
+# vim: set foldmethod=indent foldlevel=0 :

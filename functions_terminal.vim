@@ -16,7 +16,7 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
 	"let cwdname_clean=substitute(cwdname,$HOME . "/" , '' ,'g')
 	"let cwdname_clean=substitute(cwdname_clean,'\W','_','g')
     if ! exists("a:2")
-    	let tmux_session_name= g:nvim_id ."_". Sub10base_divider_tmux_time( py3eval("'{:.3f}'.format(time())") ,'._','_')
+    	let tmux_session_name= g:nvim_id ."_". Get_tmux_session_time_str()
     else
         let tmux_session_name=a:2
     endif
@@ -63,13 +63,13 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
                         let b:related_tmux_session_name= g:tmux_session_relations[tmux_session_name]
                     endif
 	else
-		let a:cmd="term " . tmux_cmdbase . " new-session -s " . tmux_session_name . " -c " . cwdname
+		let acmd="term " . tmux_cmdbase . " new-session -s " . tmux_session_name . " -c " . cwdname
         if exists("a:1")
-            let a:cmd = a:cmd . " " . a:1
+            let acmd = acmd . " " . a:1
         else
-            let a:cmd = a:cmd . " fish"
+            let acmd = acmd . " fish"
         endif
-        exe a:cmd
+        exe acmd
 	    let b:tmux_session_name=tmux_session_name
 	endif
 	" set buffervars
@@ -176,19 +176,19 @@ function! DoConfigDependentTerminalConfiguration_stage0_3()
     call Init_TermInactiv_Color()
 endfunction
 function! DoConfigDependentTerminalConfiguration_stage0_4()
-    call Daytimecolor()
+    call Color_get_hour_choice()
     call Init_Term_Color()
 endfunction
 function! DoConfigDependentTerminalConfiguration_stage0_5()
-    call Daytimecolor()
+    call Color_get_hour_choice()
     call Init_TermInactiv_Color()
 endfunction
 function! DoConfigDependentTerminalConfiguration_stage0_6()
-    call Daytimecolor()
+    call Color_get_hour_choice()
     call Init_Term_Color()
 endfunction
 function! DoConfigDependentTerminalConfiguration_stage0_7()
-    call Daytimecolor()
+    call Color_get_hour_choice()
     call Init_TermInactiv_Color()
 endfunction
 

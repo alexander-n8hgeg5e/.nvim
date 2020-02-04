@@ -21,6 +21,7 @@ command! SW SudoWrite<bang> <args>
 command! SR SudoRead<bang> <args>
 
 command! -nargs=* G call Goo("<args>")
+command! -nargs=* D call DDG("<args>")
 
 command! -nargs=* T call g:Create_Terminal_buffer("<args>")
 

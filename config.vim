@@ -27,7 +27,7 @@ set wrapmargin=0
 set textwidth=0
 set breakat=\ ^I!@*-+;:,./?
 set breakindent
-set showbreak=<<<wrap>>>            ․․․>>>․․․
+set showbreak="># wrap #>"
 let s:minimum=len(&showbreak)+20
 exe "set breakindentopt=min:".s:minimum.",shift:250"
 
@@ -147,7 +147,12 @@ call system("mkdir -p " . tmux_socket_dir)
 let g:tmux_socket= tmux_socket_dir . '/' . trim(system("hostname")) . "_1"
 "######################
 
-"###############   color setup  #########################################################
+"##########################################################
+"##############    color setup   ##########################
+"##########################################################
+" #########################
+" ##  general behaviour  ##
+" #########################
 " whether have seperate terminal color
 let g:term_color  =  0
 " whether have 2 seperate terminal colors, one aktiv term(insert mode) , one
@@ -164,6 +169,7 @@ let g:colorscheme_terminal_light_fallback = 'summerfruit'
 let g:color_inverted  = 0
 let g:term_active_colorscheme  = 'prmths'
 let g:term_inactiv_colorscheme = 'thegoodluck'
+
 " when new term is created and g:event_termdaytimecolor is set
 " update following colorschemes:
 "  g:term_inactiv_colorscheme
@@ -173,10 +179,19 @@ let g:term_inactiv_colorscheme = 'thegoodluck'
 "  additional if is set term color in set 
 "  in g:term_inactive_colorscheme is no longer static
 let g:event_termdaytimecolor   =  1
-let g:nowcolors_flavor = 'dark'
-let g:mycolors_flavor  = 'nowcolors'
-" setup time of dawn and dusk
 
+" #######################
+" ##  color selection  ##
+" #######################
+let g:mycolors_flavor        =  'hour_colors'
+let g:mycolors_default_file_flavor   =  'dark'
+let g:hour_color_flavor = 'dark'
+"let g:hour_colors_methods = ['list','random_choice']
+let g:hour_colors_method  = 'random_choice'
+
+" #############################
+" ##  hourcolor time options  ##
+" #############################
 let g:wait_for_day=1
 let g:wait_for_night=3
 let g:no_bright_light_morning=3
@@ -191,27 +206,29 @@ let g:coords={"latitude" : 49, "longitude" : 8.375 }
 "  accidentially triggered colorschemes that looked attractive: smp 
 "            
 "      bright light:                    24-3           3-6          6-9           9-12           12-15            15-18            18-21        21-24      
-let g:nowcolors_bright_light =         'summerfruit    eclipse      summerfruit   mickeysoft     thegoodluck      tango-morning    eclipse      fog
+let g:hour_colors_bright_light =       'summerfruit    eclipse      summerfruit   mickeysoft     thegoodluck      tango-morning    eclipse      fog
 \                                       beauty         PapayaWhip   terse         summerfruit    habiLight        scite            newspaper    fog
 \                                       PapayaWhip     PapayaWhip   colorful      tcsoft         mellow           mellow           ironman      fog'
 
 "      light:                           24-3           3-6          6-9           9-12           12-15            15-18            18-21        21-24      
-let g:nowcolors_light =                'fog            codepaper    biogoo        nuvola         thegoodluck      tango-morning    carrot       fog
-\                                       habiLight      PapayaWhip   terse         orange         habiLight        MountainDew      newspaper    fog
+let g:hour_colors_light =              'fog            codepaper    biogoo        nuvola         thegoodluck      tango-morning    carrot       fog
+\                                       habiLight      clarity      terse         orange         habiLight        MountainDew      newspaper    fog
 \                                       PapayaWhip     PapayaWhip   colorful      intellij       thegoodluck      scite            ironman      fog'
 
 "      medium dark:                    24-3       3-6           6-9             9-12          12-15           15-18            18-21           21-24      
-let g:nowcolors_medium_dark  =        'astroboy   mushroom      vividchalk      chlordane     cobaltish      vividchalk        gor             xorium
-\                                      atom       3dglasses     vividchalk      wolfpack      bwn            vividchalk        desertedocean   darkocean
-\                                      wolfpack   wombat256mod  astroboy        darkeclipse   atom           asu1dark          tabula          xoria256m'
+let g:hour_colors_medium_dark  =      'mdark      mushroom      vividchalk      chlordane     cobaltish      vividchalk        gor             xorium
+\                                      atom       3dglasses     native          wolfpack      bwn            symfony           desertedocean   darkocean
+\                                      wolfpack   wombat256mod  bluecloud       darkeclipse   atom           asu1dark          tabula          xoria256m'
 
 "      dark:                           24-3       3-6           6-9             9-12          12-15           15-18            18-21           21-24      
-let g:nowcolors_dark   =              'astroboy   mushroom      vividchalk      chlordane     paintbox       vividchalk        darkeclipse     xorium
-\                                      oceandeep  3dglasses     oceandeep       wolfpack      camo           wintersday        desertedocean   darkocean
-\                                      wolfpack   wombat256mod  astroboy        darkeclipse   paintbox       vividchalk        paintbox        xoria256m'
+let g:hour_colors_dark   =            'fnaqevan   mushroom      vividchalk      chlordane     paintbox       vividchalk        darkeclipse     xorium
+\                                      nature     3dglasses     oceandeep       wolfpack      camo           wintersday        desertedocean   darkocean
+\                                      wolfpack   wombat256mod  mdark           darkeclipse   paintbox       vividchalk        paintbox        xoria256m'
 
 "      dark:                           24-3       3-6           6-9             9-12          12-15           15-18            18-21           21-24      
-let g:nowcolors_dark2  =              'astroboy   mushroom      baobaozhu       chlordane     paintbox       vividchalk        darkeclipse     xorium
-\                                      oceandeep  3dglasses     oceandeep       wolfpack      camo           wintersday        desertedocean   darkocean
-\                                      wolfpack   wombat256mod  astroboy        darkeclipse   paintbox       vividchalk        paintbox        xoria256m'
+let g:hour_colors_dark2  =            'forneus    mushroom      baobaozhu       chlordane     paintbox       vividchalk        darkeclipse     xorium
+\                                      deveiate   3dglasses     oceandeep       wolfpack      camo           wintersday        desertedocean   darkocean
+\                                      asu1dark   wombat256mod  mdark           darkeclipse   paintbox       vividchalk        paintbox        xoria256m'
+
+let g:hour_colors_dark=g:hour_colors_dark2
 "##########################################################################################

@@ -1,22 +1,44 @@
 "######      color          #######################################################################################################################
 "
 "
+
 func! Init_Common_Color()
-    call Daytimecolor()
-    if g:mycolors_flavor == "nowcolors"
-        if g:nowcolors_flavor == "daytime"
-            let a:flavor = g:daytime
+    " setup avaiable options
+    let s:mycolors_flavors_to_add=["hour_colors","daytime"]
+    if ! exists("g:mycolors_flavors")
+        let g:mycolors_flavors=s:mycolors_flavors_to_add
+    endif
+    for flavor in s:mycolors_flavors_to_add
+        if count(g:mycolors_flavors,flavor)==0
+            call add(g:mycolors_flavors,flavor)
+        endif
+    endfor
+
+    call Color_get_hour_choice()
+    if g:mycolors_flavor == "hour_colors"
+        if g:hour_color_flavor == "daytime"
+            let flavor = g:daytime
         else
-            let a:flavor = g:nowcolors_flavor
+            let flavor = g:hour_color_flavor
         endif
     elseif g:mycolors_flavor == "daytime"
-        let a:flavor = g:daytime
+        let flavor = g:daytime
     else
-        let a:flavor = g:mycolors_flavor
+        let flavor = g:mycolors_default_file_flavor
     endif
-    let g:mycolors   =     readfile( $HOME . "/.config/nvim/". a:flavor ."_colorschemes" )
+    let g:mycolors   =     readfile( $HOME . "/.config/nvim/". flavor ."_colorschemes" )
     exe "colorscheme" g:colorscheme
     call Set_common_cubset_color()
+endfunction
+
+function! Color_get_available_mycolor_flavors()
+    let s:available_colorscheme_pathes = systemlist("ls ". $vd. "/*_colorschemes")
+    let s:available_mycolor_file_flavors = []
+
+    for f in s:available_colorscheme_pathes
+        call add(s:available_mycolor_file_flavors, substitute( f , '.*[/]\([^/]\+\)_colorschemes', '\1' ,"" ))
+    endfor
+    return s:available_mycolor_file_flavors
 endfunction
 
 func! Set_NormMode_Color()
@@ -223,7 +245,7 @@ function! Set_Common_Split_Color()
         execute "hi VertSplit ctermfg=16 ctermbg=99  guibg=#875fff  guifg=#ffffff gui=NONE cterm=NONE"
 endfunction
 
-function! Daytimecolor()
+function! Color_get_hour_choice()
   let hr = str2float(strftime('%H'))
   "let hr = str2float(strftime('%H')) + str2float(strftime('%M'))/60
   "set c 0;for i in (seq 1 8);for j in 0 8 16 ;set c (math $c + 1); echo '  elseif hr <= '$c;echo "    let i = "(math $j + $i );echo $i $j;end;end
@@ -276,28 +298,28 @@ function! Daytimecolor()
   elseif hr <= 24
     let i = 23
   endif
-  if g:nowcolors_flavor == "daytime"
+  if g:hour_color_flavor == "daytime"
     if (hr >= g:dawntime + g:wait_for_day ) && ( hr < g:dusktime - g:preempt_dusk )
 	    if (hr >= g:dawntime + g:no_bright_light_morning ) && ( hr < g:dusktime - g:no_bright_light_evening )
-                  let nc  =  "g:nowcolors_bright_light"
+                  let nc  =  "g:hour_colors_bright_light"
                   let g:daytime="bright_light"
         else
-                  let nc  =  "g:nowcolors_light"
+                  let nc  =  "g:hour_colors_light"
                   let g:daytime="light"
         endif
         call Set_Term_Colors_Light()
 	else
 	    if (hr >= g:dusktime + g:wait_for_night ) && ( hr < g:dawntime - g:preempt_dawn )
-                let nc ="g:nowcolors_dark"
+                let nc ="g:hour_colors_dark"
                 let g:daytime="dark"
         else
-                let nc ="g:nowcolors_medium_dark"
+                let nc ="g:hour_colors_medium_dark"
                 let g:daytime="medium_dark"
         endif
             call Set_Term_Colors_Dark()
 	endif
   else
-          let nc  =     "g:nowcolors_" . g:nowcolors_flavor
+          let nc  =     "g:hour_colors_" . g:hour_color_flavor
   endif
   let g:python_var_0=split(eval(nc))[i]
   let counter=0
@@ -310,8 +332,8 @@ function! Daytimecolor()
     let g:python_var_0=split(eval(nc))[i]
   endwhile
   let g:colorscheme=g:python_var_0
-  let g:colorscheme_terminal_dark_fallback  = split(g:nowcolors_dark )[i]
-  let g:colorscheme_terminal_light_fallback = split(g:nowcolors_light)[i]
+  let g:colorscheme_terminal_dark_fallback  = split(g:hour_colors_dark )[i]
+  let g:colorscheme_terminal_light_fallback = split(g:hour_colors_light)[i]
   exe "colorscheme" g:colorscheme
   call Set_common_cubset_color()
 endfunction

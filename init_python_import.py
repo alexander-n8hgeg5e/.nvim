@@ -1,6 +1,6 @@
 
 import vim
-from time import gmtime,localtime,time,sleep
+from time import gmtime,localtime,time,sleep,strftime
 import subprocess
 from math import ceil,floor,inf,nan
 from pylib.sun import Sun
@@ -20,3 +20,4 @@ import random
 from pprint import pprint,pformat
 
 import pynvim
+from pylib.time_utils import get_useful_localtime_string 

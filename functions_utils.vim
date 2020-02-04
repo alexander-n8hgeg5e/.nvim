@@ -98,15 +98,26 @@ endfunction
 
 function! Conditional_fold()
   if Is_cursor_start_of_line() == 1
-    foldclose
+    try
+        foldclose
+    catch E490
+    endtry
   endif
 endfunction
 
+function! Get_space(count)
+    let s:retval=' '
+    for i in range(a:count)
+        let s:retval=s:retval.' '
+    endfor
+    return s:retval
+endfunction
 
 function! GoogleSearch(str)
   tabnew
   call termopen("goo". f:str)
 endfunction
+
 "special character input needs mapping
 
 function! Insidetermnewterm()
@@ -308,7 +319,6 @@ function! Sub10base_divider_tmux_time(b,c,d)
     return substitute( a:b ,'\(\d\+\)\(\d\{3}\)\(\d\{3}\)['.a:c.']','\= submatch(1) . a:d.a:d . submatch(2) . a:d . submatch(3) .a:d .a:d ', "g" )
 endfunction
 
-
 function! To_log(data)
   redir! >> /tmp/tmux_control_log
   echo a:data
@@ -335,6 +345,11 @@ function! Goo(search_string)
     call g:Create_Terminal_buffer( "goo " . a:search_string, tmux_session_name )
 endfunction
 
+function! DDG(search_string)
+    let tmux_session_name= g:nvim_id ."_". Sub10base_divider_tmux_time( py3eval("'{:.3f}'.format(time())") ,'._','_')."__"."DDgo"
+    call g:Create_Terminal_buffer( "dg " . a:search_string, tmux_session_name )
+endfunction
+
 function! Get_comment_char()
     if b:current_syntax == "vim"
         return '"'
@@ -348,14 +363,14 @@ function! Get_comment_char()
 endfunction
 
 function! Find_file_for_includeexpr()
-    let a:path=substitute(getline("."), g:pat_fname ,"\\2", "",)
-    if filereadable(a:path)
-        return a:path
+    let apath=substitute(getline("."), g:pat_fname ,"\\2", "",)
+    if filereadable(apath)
+        return apath
     else
-        let g:pyvar_includeexpr=a:path
+        let g:pyvar_includeexpr=apath
         py3 exec(pycode['find_file_for_includeexpr']['code'])
         py3 vim.vars['pyvar_includeexpr']=find_file_for_includeexpr()
-        if g:pyvar_includeexpr != a:path
+        if g:pyvar_includeexpr != apath
             echo g:pyvar_includeexpr
             return g:pyvar_includeexpr
         else

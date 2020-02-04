@@ -68,6 +68,51 @@ else:
 """
 pycode.add_pycode( name , code ,uses_vim_vars=['pyvar_0'],doc=doc)
 
+name='poll_grep_sub_buffer'
+doc="""searches the buffer for regex (re.match) and if found does a
+substitution ,then runs a vim function with the substitution as arg
+repeats until timeout is reached
+"""
+code="""
+try:
+    if not 'pyvar_poll_grep_sub_buffer_input' in nvim.vars:
+        nvim.vars['pyvar_poll_grep_sub_buffer_input']=   {
+                                                            'range_start': None,
+                                                            'range_end': None,
+                                                            'timeout': None,
+                                                            'match_expr': None,
+                                                            'sub_match_expr': None,
+                                                            'sub_sub_expr': None,
+                                                            'callback_func_name': None,
+                                                        }
+    input=nvim.vars['pyvar_poll_grep_sub_buffer_input']
+    
+    for r in "range_start","range_end":
+        if type(input[r]) is int:
+            input[r]=str(input[r])
+    
+    results=[]
+    t0=time()
+    counter=0
+    while True:
+        lines=nvim.call("getbufline","%",input['range_start'],input["range_end"])
+        for line in lines:
+            log(line)
+            if re.match(input['match_expr'],line):
+                log("match",flush=True)
+                results.append(re.sub(input['sub_match_expr'],input['sub_sub_expr'],line))
+                nvim.call(input['callback_func_name'],result[-1])
+        if counter % 10  == 0 and time()-t0 >= input['timeout']:
+            break
+    log(results,cmd_log_max_len_half=5000)
+
+except Exception as e:
+    for line in format_tb(e.__traceback__):
+        log(line,cmd_log_max_len_half=inf)
+    log(e,cmd_log_max_len_half=inf)
+"""
+pycode.add_pycode( name , code ,uses_vim_vars=['pyvar_poll_grep_sub_buffer_input'],doc=doc)
+
 
 name='load_and_run_python_script'
 varname = 'pyvar_'+ pycode.b64name(name[5:10])

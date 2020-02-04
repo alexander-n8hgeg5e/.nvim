@@ -28,9 +28,8 @@ do_log=True
 flush_instantly=False
 buflen_blocking=1
 buflen_nonblocking=1024
-cmd_log_max_len_half=50
 
-def log(bin_msg,flush=False,file=stdout):
+def log(bin_msg,flush=False,file=stdout,cmd_log_max_len_half=50):
     if not type(bin_msg) is str:
         if type(bin_msg) is bytes:
             logmsg = bin_msg.decode()
@@ -38,7 +37,8 @@ def log(bin_msg,flush=False,file=stdout):
             logmsg = str(bin_msg)
     else:
         logmsg=bin_msg
-    logmsg+="\n"
+    if not logmsg[-1]=="\n":
+        logmsg+="\n"
     if len(logmsg) > 2 * cmd_log_max_len_half:
         logmsg=logmsg[:cmd_log_max_len_half]+"\n...skipped...\n" + logmsg[ - cmd_log_max_len_half:]
     print(logmsg,file=file)
@@ -53,7 +53,7 @@ def run_cmds():
         except:
             if do_log:
                 log("ERROR, Exception during cmd:",file=stderr)
-                log(cmd,file=stderr,flush=True)
+                log( cmd, file=stderr,flush=True, cmd_log_max_len_half=2000 )
             raise
         if do_log:
             log("cmd:")

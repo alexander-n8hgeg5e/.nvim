@@ -3,7 +3,7 @@
 limit = 2
 end_cmd=b"\x00\n"
 
-pwp=Py_worker_pool()
+pwp=Py_worker_pool(size=os.cpu_count())
 
 def gen_new_py_worker(name,py_workers): #{{{
     if len(py_workers) > limit:

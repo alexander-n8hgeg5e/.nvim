@@ -121,7 +121,7 @@ function! Init_tmux_connection()
 endfunction
 
 function! Tmux_status_line_checker_subprocess()
-    py3 pwp.run_pycode(pycode['tmux_status_line_checker']['code'])
+    py3 pycode['tmux_status_line_checker']['code']
 endfunction
 
 function! On_tmux_control_exit()
@@ -354,3 +354,8 @@ function! Tmux_copymode_e()
     call feedkeys("e","nt")
 endfunction
 
+" gen time string
+function! Get_tmux_session_time_str()
+    py3 vim.vars['tmux_session_time_str']=get_useful_localtime_string(dec_sec_sep="_")
+    return g:tmux_session_time_str
+endfunction

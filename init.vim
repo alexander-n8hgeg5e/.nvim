@@ -8,7 +8,7 @@ let $f= $vcd . "/functions.vim"
 let $i= $vcd . "/init.vim"
 let $k= $vcd . "/keybinds.vim"
 so  $vcd/p.vim
-let $c=$vcd . "/config.vim"
+let $C=$vcd . "/config.vim"
 let $p=$vcd . "/plugin_config.vim"
 "#################################
 "

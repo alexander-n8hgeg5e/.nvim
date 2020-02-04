@@ -53,6 +53,7 @@ let g:NERDTreeMapActivateNode="<CR>"
 let g:NERDTreeMapPreview="<Space>"
 let g:NERDTreeMapOpenExpl="<S-e>"
 let g:NERDTreeMapOpenSplit="<S-i>"
+let g:NERDTreeMapChangeRoot="R"
 
 let g:NERDTreeIgnore= []
 let g:NERDTreeShowHidden=0
@@ -76,5 +77,7 @@ let g:NERDTreeWinSize=35
 
 "####### colorizer ########
 let g:colorizer_textchangedi = 0
+let g:colorizer_colornames = 0
+let g:colorizer_use_virtual_text = 1
 
 
