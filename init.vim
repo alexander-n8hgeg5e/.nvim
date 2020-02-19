@@ -7,7 +7,7 @@ let $SHELL="fish"
 let $f= $vcd . "/functions.vim"
 let $i= $vcd . "/init.vim"
 let $k= $vcd . "/keybinds.vim"
-so  $vcd/p.vim
+"so  $vcd/p.vim this is for gentoo prefix
 let $C=$vcd . "/config.vim"
 let $p=$vcd . "/plugin_config.vim"
 "#################################
