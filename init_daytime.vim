@@ -5,6 +5,7 @@ let s:daytime = substitute( s:daytime, '\v(^bind.*\n)|(\n)' , "" ,"g" )
 
 if  ! empty(s:daytime) > 0
     let g:hour_color_flavor = s:daytime
-elseif filereadable("daytimeconf.vim") == 0
+elseif filereadable( $vd . "/daytimeconf.vim") == 1
+    " 1 == True
     so $vcd/daytimeconf.vim
 endif
