@@ -1,5 +1,6 @@
 
 let s:f1=        "function! ClipboardWrite(lines,regtype)\n"
+let s:f1= s:f1.  "    py3 pwp.run_pycode(pycode[\"clipboard_update_xorg\"][\"code\"])\n"
 let s:f1= s:f1.  "    call system(['dd', 'of=" . $CLIPBOARD_FILE . "'] , a:lines )\n"
 let s:f1= s:f1.  "    call system(['dd', 'of=". $CLIPBOARD_META_FILE . "' ] , a:regtype )\n"
 let s:f1= s:f1.  "endfunction"

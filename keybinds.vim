@@ -397,6 +397,7 @@ call extend( g:keybinds, additonal_keybinds )
 "
 let additonal_keybinds = {
 \ '<C-a>___t___Common'                      :                   [ '*'     ,      '<C-b>'   ],
+\ '<C-b>___t___Common'                      :                   [ '*'     ,      '<C-a>'   ],
 \ '<S-C-A>___t___Common'                    :                   [ '*'     ,      '<C-a>'   ],
 \ '<C-V>___t___Common'                      :                   [ '*'     ,      '<C-\><C-N>"*pi'   ],
 \ '<Esc>___t___Common'                      :                   [ '*'     ,      '<C-\><C-N><Cmd>call EventTermEscape()<CR>'   ],

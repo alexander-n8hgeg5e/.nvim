@@ -166,4 +166,18 @@ def find_file_for_includeexpr():
 """
 pycode.add_pycode( name , code ,uses_vim_vars=['pyvar_includeexpr'],doc=doc)
 
+name='clipboard_update_xorg'
+doc="""only python >= 3.6"""
+code="""
+from os import environ
+from subprocess import Popen,PIPE
+from os import set_blocking 
+clipboard_file_path=environ['CLIPBOARD_FILE']
+with open(clipboard_file_path,"rb") as f:
+    data=f.read()
+p=Popen(["clipster","-c"],stdin=PIPE)
+p.communicate(input=data)
+"""
+pycode.add_pycode( name , code ,uses_vim_vars=[],doc=doc)
+
 # vim: set syntax=py_worker_code      :
