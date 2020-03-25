@@ -173,8 +173,7 @@ from os import environ
 from subprocess import Popen,PIPE
 from os import set_blocking 
 clipboard_file_path=environ['CLIPBOARD_FILE']
-with open(clipboard_file_path,"rb") as f:
-    data=f.read()
+data=nvim.eval('@"').encode(encoding="utf8")
 p=Popen(["clipster","-c"],stdin=PIPE)
 p.communicate(input=data)
 """
