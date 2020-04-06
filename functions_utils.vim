@@ -357,6 +357,10 @@ function! Get_comment_char()
         return "%"
     elseif b:current_syntax == "c"
         return "//"
+    elseif b:current_syntax == "cpp"
+        return "//"
+    elseif b:current_syntax == "javascript"
+        return "//"
     else
         return '#'
     endif
