@@ -25,6 +25,6 @@ let pat_popen_cmd=sub2pylist
 let sub_folds_funcdef='%s/\v(\w\s*$)(\n(\s*\n)*[ ]*def[ ].*\n.*)$/\1   #}}}\2   #{{{/'
 let pat_folds_funcdef=sub_folds_funcdef
 let sub_emerge_outp_clean_packages='%s/\v^.*[(](.*)[-]\d.*[,].*$/\1'
-let pat_emerge_outp_clean_packages=pat_emerge_outp_clean_packages
+let pat_emerge_outp_clean_packages=sub_emerge_outp_clean_packages
 let sub_align='let col=getcurpos()[2]| exe ''s/\v^(\S+)\s+(%''.col.''v|\S)(\s*)(\S+.*$)/\=submatch(1) . Get_space(''.col.''-len(submatch(1))-1) .submatch(2) . submatch(4)/'''
 let sub_mv_space_gt1_right='s/\%V\v([ ]{2,})([^ ]*)/\= submatch(2) . submatch(1) /g'
