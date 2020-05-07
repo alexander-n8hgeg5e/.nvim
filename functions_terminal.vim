@@ -92,6 +92,10 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
 	call EventWinEnter()
         call Set_Term_Colors()
         startinsert!
+  augroup tmuxterm
+      autocmd!
+      exe 'autocmd TermClose <buffer='.bufnr("%").'> close'
+  augroup END
 endfunction
 function! Generate_funktion_Create_Terminal_buffer()
         if ! g:term_color &&  ! g:term_2color 
