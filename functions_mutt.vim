@@ -10,6 +10,10 @@ function! Mutt()
   set wrap
   "set cursorline cursorcolumn
   call Set_NormMode_ColorStyle()
+  augroup mutt
+      autocmd!
+      exe 'autocmd TermClose <buffer='.bufnr("%").'> close'
+  augroup END
   startinsert
 endfunction
 "#####################################################################################
