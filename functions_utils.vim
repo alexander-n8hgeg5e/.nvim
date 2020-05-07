@@ -113,11 +113,6 @@ function! Get_space(count)
     return s:retval
 endfunction
 
-function! GoogleSearch(str)
-  tabnew
-  call termopen("goo". f:str)
-endfunction
-
 "special character input needs mapping
 
 function! Insidetermnewterm()
