@@ -39,6 +39,7 @@ set smarttab
 set expandtab
 set tabstop=4
 set shiftwidth=4
+set virtualedit=block
 
 function! Status_line_modified()
     if &modified
