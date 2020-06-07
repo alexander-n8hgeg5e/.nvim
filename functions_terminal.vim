@@ -1,5 +1,5 @@
 function! Create_Terminal_buffer_0(...)  "means: Action: create one
-"       called from default mapping
+"       called from default mapping {{{ {{{
 "       a:1 cmd
 "       a:2 tmux session name
         stopinsert
@@ -92,9 +92,10 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
 	call EventWinEnter()
         call Set_Term_Colors()
         startinsert!
-endfunction
+endfunction "}}}
+
 function! Generate_funktion_Create_Terminal_buffer()
-        if ! g:term_color &&  ! g:term_2color 
+        if ! g:term_color &&  ! g:term_2color "{{{
 		let g:Create_Terminal_buffer=function("Create_Terminal_buffer_0")
 	endif
         if   g:term_color &&   ! g:term_2color 
@@ -107,11 +108,11 @@ function! Generate_funktion_Create_Terminal_buffer()
         if   g:term_color &&   g:term_2color 
 		let g:Create_Terminal_buffer=function("Create_Terminal_buffer_0")
 	endif
-endfunction
+endfunction "}}}}}}
 
 
 function! EventTermEnter_0()  "means: Event: normal -> terminsert
-endfunction
+endfunction "{{{{{{
 function! EventTermEnter_1()
 endfunction
 function! EventTermEnter_2()
@@ -127,11 +128,10 @@ function! EventTermEnter_6()
 endfunction
 function! EventTermEnter_7()
 call Set_TermActiv_Color()
-endfunction
-
+endfunction "}}}
 
 function! Generate_funktion_EventTermEnter()
-if ! g:term_color && ! g:TerminalSpecialMovement &&  ! g:term_2color 
+if ! g:term_color && ! g:TerminalSpecialMovement &&  ! g:term_2color "{{{
         let g:EventTermEnter=function("EventTermEnter_0")                                              
 endif                                                                                      
 if g:term_color && ! g:TerminalSpecialMovement   &&  !  g:term_2color
@@ -158,13 +158,13 @@ endif
 
 call extend(g:tmux_functions,{ 'ete' : g:EventTermEnter })
 
-endfunction
+endfunction "}}}}}}
 
 
 "" one time terminal buffer init
 "" only config dependend stuff stage0: befor insertmode
 function! DoConfigDependentTerminalConfiguration_stage0_0()
-    call Init_Term_Color()
+    call Init_Term_Color()                                   "{{{{{{
 endfunction
 function! DoConfigDependentTerminalConfiguration_stage0_1()
     call Init_TermInactiv_Color()
@@ -190,10 +190,10 @@ endfunction
 function! DoConfigDependentTerminalConfiguration_stage0_7()
     call Color_get_hour_choice()
     call Init_TermInactiv_Color()
-endfunction
+endfunction  "}}}
 
 function! Generate_funktion_DoConfigDependentTerminalConfiguration_stage0()
-if ! g:term_color && ! g:TerminalSpecialMovement  && ! g:event_termdaytimecolor
+if ! g:term_color && ! g:TerminalSpecialMovement  && ! g:event_termdaytimecolor "{{{
 let g:DoConfigDependentTerminalConfiguration_stage0=function("DoConfigDependentTerminalConfiguration_stage0_0")
 endif
 if g:term_color && ! g:TerminalSpecialMovement    && ! g:event_termdaytimecolor
@@ -217,13 +217,13 @@ endif
 if g:term_color && g:TerminalSpecialMovement      &&  g:event_termdaytimecolor
 let g:DoConfigDependentTerminalConfiguration_stage0=function("DoConfigDependentTerminalConfiguration_stage0_7")
 endif
-endfunction
+endfunction "}}}}}}
 
 "" one time terminal buffer init
 "" only config dependend stuff stage1: setup things used in insertmode
 "" can be called befor actually entering the insertmode
 "" todo: warn if &background of activ is not &background of inactiv
-function! DoConfigDependentTerminalConfiguration_stage1_0()
+function! DoConfigDependentTerminalConfiguration_stage1_0() "{{{{{{
 endfunction
 function! DoConfigDependentTerminalConfiguration_stage1_1()
     call Init_TermActiv_Color()
@@ -242,10 +242,10 @@ function! DoConfigDependentTerminalConfiguration_stage1_6()
 endfunction
 function! DoConfigDependentTerminalConfiguration_stage1_7()
     call Init_TermActiv_Color()
-endfunction
+endfunction "}}}
 
 function! Generate_funktion_DoConfigDependentTerminalConfiguration_stage1()
-if ! g:term_2color && ! g:TerminalSpecialMovement  && ! g:event_termdaytimecolor
+if ! g:term_2color && ! g:TerminalSpecialMovement  && ! g:event_termdaytimecolor "{{{
 let g:DoConfigDependentTerminalConfiguration_stage1=function("DoConfigDependentTerminalConfiguration_stage1_0")
 endif
 if g:term_2color && ! g:TerminalSpecialMovement    && ! g:event_termdaytimecolor
@@ -269,21 +269,20 @@ endif
 if g:term_2color && g:TerminalSpecialMovement      &&  g:event_termdaytimecolor
 let g:DoConfigDependentTerminalConfiguration_stage1=function("DoConfigDependentTerminalConfiguration_stage1_7")
 endif
-endfunction
+endfunction "}}}}}}
 
 function! EventTermEscape_256()
-    if exists('b:termcursor')
+    if exists('b:termcursor') "{{{
         call setpos( '.', b:termcursor )
     else
         let col  =  float2nr(winwidth(0)/2)
         let line = float2nr(winheight(0)/2)
         call setpos( '.' , [ 0, line  , col , 0 , col ])
     endif
-endfunction
-
+endfunction "}}}
 
 function! EventTermEscape_0()       "Event
-call Set_NormMode_ColorStyle()
+call Set_NormMode_ColorStyle()  "{{{{{{
 "norm G
 endfunction
 function! EventTermEscape_1()
@@ -318,10 +317,10 @@ call Set_NormMode_ColorStyle()
 call Set_TermInaktiv_Color()
 call TerminalSpecialMovementUpdateOn()
 "norm G
-endfunction
+endfunction "}}}
 
 function! Generate_funktion_EventTermEscape()
-if ! g:term_color && ! g:TerminalSpecialMovement && ! g:term_2color 
+if ! g:term_color && ! g:TerminalSpecialMovement && ! g:term_2color "{{{  
         let g:EventTermEscape=function("EventTermEscape_0")
 endif
 if g:term_color && ! g:TerminalSpecialMovement   && ! g:term_2color 
@@ -345,12 +344,11 @@ endif
 if g:term_color && g:TerminalSpecialMovement   && g:term_2color
         let g:EventTermEscape=function("EventTermEscape_7")
 endif
-endfunction
-
+endfunction "}}}}}}
 
 
 function! TerminalSpecialMovementOn()
-    echo "tsp on"
+    echo "tsp on" " {{{
     exe "nnoremap  <buffer> <silent> p        " .    g:keybinds['p___n___TermSpecialMovement'][1]
     exe "nnoremap  <buffer> <silent> <Left>   " .    g:keybinds['<Left>___n___TermSpecialMovement'][1]
     exe "nnoremap  <buffer> <silent> <Right>  " .    g:keybinds['<Right>___n___TermSpecialMovement'][1]
@@ -363,10 +361,10 @@ function! TerminalSpecialMovementOn()
     exe "nnoremap  <buffer> <silent> <Space>  " .    g:keybinds['<Space>___n___TermSpecialMovement'][1]
     exe "nnoremap  <buffer> <silent> <PageUp> " .    g:keybinds['<PageUp>___n___TermSpecialMovement'][1]
     exe "nnoremap  <buffer> <silent> <PageDown> " .  g:keybinds['<PageDown>___n___TermSpecialMovement'][1]
-endfunction
+endfunction "}}}
 
 function! TerminalSpecialMovementOff()
-     echo "tsp off"
+     echo "tsp off" "{{{
      exe "nnoremap <silent> <buffer>  p        " . g:keybinds['p___n___Common'][1]
      exe "nnoremap <silent> <buffer>  <Left>   " . g:keybinds['<Left>___n___Common'][1]
      exe "nnoremap <silent> <buffer>  <Right>  " . g:keybinds['<Right>___n___Common'][1]
@@ -379,10 +377,10 @@ function! TerminalSpecialMovementOff()
      exe "nnoremap <silent> <buffer>  <Space>  " . g:keybinds['<Space>___n___TermMode'][1]
      exe "nnoremap  <buffer> <silent> <PageUp> " . g:keybinds['<PageUp>___n___TermMode'][1]
      exe "nnoremap  <buffer> <silent> <PageDown> " g:keybinds['<PageDown>___n___TermMode'][1]
-endfunction
+endfunction "}}}
 
 function! TerminalSpecialMovementToggle()
- if exists("b:TerminalSpecialMovement")
+ if exists("b:TerminalSpecialMovement") "{{{
      if b:TerminalSpecialMovement == 0
          let b:TerminalSpecialMovement= 1
          call TerminalSpecialMovementOn()
@@ -411,11 +409,8 @@ function! TermKeyNCE()
 	call feedkeys("\<C-\>\<C-n>",'mt')
 endfunction
 
-
-
-
 function! ConfDep_Event_TermWinEnter_0() " Event
-  "norm G
+  "norm G "{{{ {{{
   set sidescrolloff=0
   set sidescroll=0
 endfunction
@@ -465,10 +460,10 @@ function! ConfDep_Event_TermWinEnter_7()
   set sidescroll=0
   startinsert
   "norm G
-endfunction
+endfunction "}}}
 
 function! Generate_funktion_ConfDep_Event_TermWinEnter()
-if ! g:term_color && ! g:TerminalSpecialMovement && ! g:TerminalAutoGoIn 
+if ! g:term_color && ! g:TerminalSpecialMovement && ! g:TerminalAutoGoIn  "{{{
         let g:ConfDep_Event_TermWinEnter=function("ConfDep_Event_TermWinEnter_0")
 endif
 if g:term_color && ! g:TerminalSpecialMovement  && ! g:TerminalAutoGoIn
@@ -492,12 +487,10 @@ endif
 if g:term_color && g:TerminalSpecialMovement &&  g:TerminalAutoGoIn
         let g:ConfDep_Event_TermWinEnter=function("ConfDep_Event_TermWinEnter_7")
 endif
-endfunction
-
-
+endfunction "}}} }}}
 
 function! ConfDep_Event_TermWinLeave_0()
-  call Set_NormMode_ColorStyle() 
+  call Set_NormMode_ColorStyle()  "{{{ {{{
     exe "set sidescrolloff=".g:sidescrolloff
     exe "set sidescroll=".g:sidescroll
 endfunction
@@ -515,12 +508,10 @@ function! ConfDep_Event_TermWinLeave_3()
   call Set_NormMode_Color()
     exe "set sidescrolloff=".g:sidescrolloff
     exe "set sidescroll=".g:sidescroll
-endfunction
-
-
+endfunction "}}}
 
 function! Generate_funktion_ConfDep_Event_TermWinLeave()
-if ! g:term_color && ! g:TerminalSpecialMovement 
+if ! g:term_color && ! g:TerminalSpecialMovement  "{{{
         let g:ConfDep_Event_TermWinLeave=function("ConfDep_Event_TermWinLeave_0")
 endif
 if g:term_color && ! g:TerminalSpecialMovement 
@@ -532,4 +523,6 @@ endif
 if g:term_color && g:TerminalSpecialMovement 
         let g:ConfDep_Event_TermWinLeave=function("ConfDep_Event_TermWinLeave_3")
 endif
-endfunction
+endfunction "}}} }}}
+
+" vim: foldnestmax=1 foldlevel=0 foldmethod=marker :
