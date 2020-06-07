@@ -2,13 +2,13 @@ function! CreateNerdtreeBuffer()
     call EventWinLeave()
 	NERDTreeToggle
     call SetBuffersMode(5)
-    call Init_Keybinds_(g:keybinds,'NerdtreeMode')
+    call Init_Keybinds(g:keybinds,'NerdtreeMode')
     call EventNerdtreeWinEnter()
 endfunction
 
 function! EventNerdtreeWinEnter()
     call SetBuffersMode(5)
-    call Init_Keybinds_(g:keybinds,'NerdtreeMode')
+    call Init_Keybinds(g:keybinds,'NerdtreeMode')
     "hi CursorLine guibg=#ffff00 guifg=#0000ff
 endfunction
 
@@ -60,5 +60,5 @@ endfunction
 
 fun! EventNerdtreeWinLeave()
 	"todo remove this
-        "call Init_Keybinds_(g:keybinds,'DefaultMode')
+        "call Init_Keybinds(g:keybinds,'DefaultMode')
 endfunction

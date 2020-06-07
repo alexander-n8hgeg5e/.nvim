@@ -79,7 +79,7 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
 	call g:DoConfigDependentTerminalConfiguration_stage0()
     "    autocmd TermClose      <buffer>  exe 'bufunload ' . buf
 	" init keybinds
-        call Init_Keybinds_(g:keybinds,'TermMode')
+        call Init_Keybinds(g:keybinds,'TermMode')
         call SetTabName_('Term')
         set nonumber norelativenumber
         set wrap

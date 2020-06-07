@@ -2,12 +2,12 @@ function! CreateNetrwBuffer()
     "call EventWinLeave()
     Lexplore
     call SetBuffersMode(5)
-    call Init_Keybinds_(g:keybinds,'NetrwMode')
+    call Init_Keybinds(g:keybinds,'NetrwMode')
     "call EventWinEnter()
 endfunction
 function! EventNetrwWinEnter()
     call SetBuffersMode(5)
-    call Init_Keybinds_(g:keybinds,'NetrwMode')
+    call Init_Keybinds(g:keybinds,'NetrwMode')
     "call EventWinEnter()
 endfunction
 function! Key_netrw_preview(islocal)
@@ -58,5 +58,5 @@ endfunction
 
 fun! EventNetrwWinLeave()
 	"todo remove this
-        call Init_Keybinds_(g:keybinds,'DefaultMode')
+        call Init_Keybinds(g:keybinds,'DefaultMode')
 endfunction

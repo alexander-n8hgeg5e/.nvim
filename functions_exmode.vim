@@ -24,7 +24,7 @@ function! EventExModeWinEnter()
 	"" call only directly from keybinding
 	if ! (GetBuffersMode()==2)
              let b:modified=0
-             call Init_Keybinds_(g:keybinds,'ExMode')
+             call Init_Keybinds(g:keybinds,'ExMode')
 	call SetBuffersMode(2)
         endif
 

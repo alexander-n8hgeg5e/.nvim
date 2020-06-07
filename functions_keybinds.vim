@@ -1,4 +1,4 @@
-function! Init_Keybinds_(dictt,modestring)
+function! Init_Keybinds(dictt,modestring)
      if (a:modestring == "TermMode") && GetBuffersMode() != 1
 	     echoe ("error: wrong keybinds call")
     endif

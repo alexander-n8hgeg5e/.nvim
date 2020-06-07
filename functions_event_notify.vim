@@ -68,8 +68,8 @@ endfunction
 function! CmdwinEnter()
 "set cursorcolumn
 if ! exists("b:ExMode_Keybinds")
-        call Init_Keybinds_(g:keybinds,'ExMode')
-        call Init_Keybinds_(g:keybinds_apps,'ExMode')
+        call Init_Keybinds(g:keybinds,'ExMode')
+        call Init_Keybinds(g:keybinds_apps,'ExMode')
 else
         let b:ExMode_Keybinds=1
 endif

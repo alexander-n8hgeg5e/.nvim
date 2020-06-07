@@ -3,7 +3,7 @@ function! Mutt()
   silent call termopen('m')
   call SetTabName_('Mutt')
   let w:mode='mutt'
-  call Init_Keybinds_(g:keybinds,'Mutt')
+  call Init_Keybinds(g:keybinds,'Mutt')
   call SetBuffersMode(3)
   call g:DoConfigDependentTerminalConfiguration_stage0()
   call g:DoConfigDependentTerminalConfiguration_stage1()
