@@ -10,9 +10,9 @@ let b:did_ftplugin = 1
 setlocal linebreak
 setlocal wrap
 setlocal wrapmargin=2
+setlocal breakindent
+setlocal breakindentopt=min:20,shift:4
 setlocal textwidth=0
-setlocal nobreakindent
-setlocal breakindentopt=min:20,shift:0
 " hide showbreak chars that a global option
 hi NonText guifg=bg guibg=bg
 augroup man
