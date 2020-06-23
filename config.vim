@@ -70,10 +70,11 @@ set foldclose=
 set fillchars=fold:\ 
 set foldnestmax=20
 set foldminlines=1
-set foldignore='#'
+set foldignore=''
 set foldlevelstart=99
 set foldmarker={{{,}}}
 set foldtext=Foldtext()
+set foldcolumn=0
 
 set diffopt=internal,filler,vertical,indent-heuristic,algorithm:histogram
 
