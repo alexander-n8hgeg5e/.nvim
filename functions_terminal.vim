@@ -25,7 +25,7 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
 	" remember that and make a backup of the session name
     " if a:1 is used, make always a new session
 	if exists("b:related_tmux_session_name") && ! exists("a:1")
-		call system( tmux_cmdbase ." has-session -t " . b:related_tmux_session_name)
+		call system( [ tmux_cmdbase, "has-session", "-t", b:related_tmux_session_name] )
 		let status_has_related_session=v:shell_error
 		let tmux_session_name=b:related_tmux_session_name 
 	else

@@ -144,9 +144,9 @@ let g:option_terminal_buffhidden = 'unload'
 let g:TerminalAutoGoIn = 1
 let g:last_complete=0
 "tmux and terminal vars
-let g:tmux_socket_dir= "/tmp/tmux-" . trim(system("id -u"))
-call system("mkdir -p " . tmux_socket_dir)
-let g:tmux_socket= tmux_socket_dir . '/' . trim(system("hostname")) . "_1"
+let g:tmux_socket_dir= "/tmp/tmux-" . trim(system(["id","-u"]))
+call system(["mkdir", "-p", tmux_socket_dir ])
+let g:tmux_socket= tmux_socket_dir . '/' . trim(system(["hostname"])) . "_1"
 "######################
 
 "##########################################################

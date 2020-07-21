@@ -58,7 +58,7 @@ let g:tmux_session_relations={}
 "########################################
 
 "#### load stuff #####################################################################################
-call system("rind clipster -d")
+call system(["rind", "clipster", "-d"])
 so $vcd/plugin_config.vim
 so $vcd/functions.vim
 so $vcd/clipboard.vim

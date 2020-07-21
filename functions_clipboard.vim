@@ -20,8 +20,8 @@ exe s:f1
         "py3 pwp.run_pycode(pycode['split_clipboard']['code'])
 
 let s:f2 =        "function! ClipboardRead()\n"
-let s:f2 = s:f2 . "    let lines =   system('cat " . $CLIPBOARD_FILE ."')\n"
-let s:f2 = s:f2 . "    let regtype = system('cat " . $CLIPBOARD_META_FILE ."')\n"
+let s:f2 = s:f2 . "    let lines =   system(['cat', '" . $CLIPBOARD_FILE ."'])\n"
+let s:f2 = s:f2 . "    let regtype = system(['cat', '" . $CLIPBOARD_META_FILE ."'])\n"
 let s:f2 = s:f2 . '    return [split(lines,''\n'') , regtype ]'."\n"
 let s:f2 = s:f2 . "endfunction\n"
 exe s:f2
