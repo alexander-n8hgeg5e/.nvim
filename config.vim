@@ -18,9 +18,11 @@ set autowriteall
 set undolevels=1000000
 set number
 set undofile
+set shada=!,%,'100000,/100000,:100000,@100000,s10000
+set updatetime=20000
+
 set confirm
 set mouse=a
-
 set nowrap
 set linebreak
 set wrapmargin=0
@@ -68,10 +70,10 @@ set foldmethod=indent
 set foldopen=block,hor,insert,jump,mark,percent,quickfix,search,tag,undo
 set foldclose=
 set fillchars=fold:\ 
-set foldnestmax=20
+set foldnestmax=1
 set foldminlines=1
 set foldignore=''
-set foldlevelstart=99
+set foldlevelstart=0
 set foldmarker={{{,}}}
 set foldtext=Foldtext()
 set foldcolumn=0
