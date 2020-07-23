@@ -6,7 +6,7 @@ function! VimEnter()
     call system(["tmux_nvim_update_nvim_listen_addr ", v:servername ])
     "set cursorline cursorcolumn
 	" new nvim , so update socket file
-    call system(['e', '--scan', '.'])
+    "call system(['e', '--scan', '.'])
     exe "set sidescrolloff=".g:sidescrolloff
     exe "set sidescroll=".g:sidescroll
 endfunction
