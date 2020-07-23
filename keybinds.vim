@@ -123,8 +123,8 @@ let additonal_keybinds = {
 \ '<C-Right>___c___ExMode' : [    '*@'    ,    '<Cmd>call EventExModeWinLeave()<CR><C-c><C-c><Cmd>      call GoRight()             <CR><Cmd>call EventWinEnter()<CR>' ],
 \ '<C-d>___ ___ExMode'     : [    '*@'    ,    '<Cmd>call EventExModeWinLeave()<CR><C-c><C-c><Cmd>      call GoDown()              <CR><Cmd>call EventWinEnter()<CR>' ],
 \ '<C-s>___ ___ExMode'     : [    '*@'    ,    '<Cmd>call EventExModeWinLeave()<CR><C-c><C-c><Cmd>      call GoTabLeft()           <CR><Cmd>call EventWinEnter()<CR>' ],
-\ '<CR>___n___ExMode'      : [    '*@'    ,    '<Cmd>call EventExModeWinLeave()<CR>i<CR><Cmd>           call EventWinEnter()       <CR>' ],
-\ '<CR>___i___ExMode'      : [    '*@'    ,    '<Cmd>call EventExModeWinLeave()<CR><CR><Cmd>            call EventWinEnter()       <CR>' ],
+\ '<CR>___n___ExMode'      : [    '*@'    ,    '<Cmd>call EventExModeWinLeave()<CR>i<CR>'                                                ],
+\ '<CR>___i___ExMode'      : [    '*@'    ,    '<Cmd>silent! call EventExModeWinLeave()<CR><CR>'                                         ],
 \ '<C-e>___i___ExMode'     : [    '*@'    ,    '<Cmd>call EventExModeWinLeave()<CR><C-c><C-c><C-c><Cmd> call EventWinEnter()       <CR>' ],
 \ '<Esc>___ ___ExMode'     : [    '*@'    ,    '<Cmd>call EventExModeWinLeave()<CR><C-c><C-c><Cmd>      call EventWinEnter()       <CR>' ],
 \ '<C-Down>___ ___ExMode'  : [    '*@'    ,    '<Cmd>call EventExModeWinLeave()<CR><C-c><C-c><Cmd>      call EventWinEnter()       <CR>' ],
@@ -194,8 +194,9 @@ let additonal_keybinds = {
 \ '<C-s>___v___DefaultMode'     : [ '*', '<Cmd>call EventWinLeave()<CR><Cmd>call GoTabLeft()<CR><Cmd>call EventWinEnter()<CR>' ],
 \}
 call extend( g:keybinds, additonal_keybinds )
-
-" netrw
+"#---------#"
+"#  netrw  #"
+"#---------#"
 "let additonal_keybinds = {'-___nv___Common'                         :                   [    '*'     ,    '<Cmd>call CreateNetrwBuffer()<CR>'   ]}
 "call extend( g:keybinds, additonal_keybinds )
 let g:Netrw_UserMaps= [
@@ -363,7 +364,7 @@ let additonal_keybinds = {
 \ '<M-b>___t___Common'         : [    ' ',       '<C-\><C-N><Cmd>call OpenBrowser()<CR>' ],
 \ '<LeftMouse>___c___Common'   : [    '*',       '<Esc>' ],
 \ '<F3>___ ___Common'          : [    '*',       'nzz' ],
-\ '<CR>___ ___Common'          : [    '*',       '<C-]>zz' ],
+\ '<CR>___n___Common'          : [    '*',       '<C-]>zz' ],
 \ '<Space>___no___Common'      : [    '*',       '<Cmd>call Cscopefind(str2nr( v:count) , expand("<cword>")) <CR>zz' ],
 \ '<C-U>___n___Common'         : [    '*',       '<C-R>' ],
 \ '<C-Up>___no___Common'       : [    '*',       '<Cmd>call EventWinLeave()<CR><Cmd>call GoUp()<CR><Cmd>call EventWinEnter()<CR>' ],
