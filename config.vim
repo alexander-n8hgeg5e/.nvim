@@ -20,6 +20,7 @@ set number
 set undofile
 set shada=!,%,'100000,/100000,:100000,@100000,s10000
 set updatetime=20000
+set hidden
 
 set confirm
 set mouse=a
@@ -118,7 +119,7 @@ let g:sidescrolloff=15
 set nosmartindent 
 set belloff=all
 set eadirection=both
-set cmdheight=4
+set cmdheight=2
 set cmdwinheight=40
 set noequalalways
 set shortmess=aAtT
