@@ -33,6 +33,7 @@ set breakindent
 set showbreak="># wrap #>"
 let s:minimum=len(&showbreak)+20
 exe "set breakindentopt=min:".s:minimum.",shift:25"
+set mouse=""
 
 set conceallevel=1
 set listchars=tab:┈\ ,trail:…,nbsp:˽,conceal:․,extends:→,precedes:←,eol:↙

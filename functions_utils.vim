@@ -121,9 +121,9 @@ function! Insidetermnewterm()
 endfunction
 
 function! Cscopefind(...)
-	if a:000[0] == 0
-		call feedkeys("\<C-]>","tn")
-    elseif a:000[0] == 11
+	"if a:000[0] == 0
+	"	call feedkeys("\<C-]>","tn")
+    if a:000[0] == 11
 	    exe "cscope find  0" a:000[1]
     elseif a:000[0] == 22
 	    exe "help" a:000[1]
