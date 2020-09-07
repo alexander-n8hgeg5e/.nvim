@@ -16,6 +16,11 @@ from traceback import format_tb
 from os import set_blocking
 from math import ceil
 from pylib.file_utils.py_split import split_file_on_sep
+import pylib
+import os
+import sys
+import re
+import subprocess
 
 name = argv[2]
 socketpath=argv[1]
