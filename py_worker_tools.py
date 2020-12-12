@@ -45,7 +45,11 @@ class Py_worker(subprocess.Popen):
         self.name=name
         self.cls=self.__class__
         self.logfilepath=logfilepath
-        self.logfile=open(self.logfilepath,mode="ab")
+        if self.logfilepath == "syslog":
+            self.logger  = subprocess.Popen(['logger', '-p', 'user.err'] , stdin=subprocess.PIPE)
+            self.logfile = self.logger.stdin
+        else:
+            self.logfile = open(self.logfilepath,mode="ab")
         super().__init__( [ "python3" , 
                             self.cls.pyfile,
                             vim.vvars['servername'],
@@ -75,7 +79,7 @@ class Py_worker(subprocess.Popen):
 
 class Py_worker_pool(dict):
 
-    logfilepath="/tmp/py_worker_log"
+    logfilepath="syslog"
 
     @staticmethod
     def vim_escape(msg):
@@ -98,7 +102,6 @@ class Py_worker_pool(dict):
         self.cls=self.__class__
         self.size=size
         self.logfilepath=self.cls.logfilepath
-        self.logfile=open(self.logfilepath,mode='at')
         for i in range(self.size):
             name=str(i)
             self.update({ name : Py_worker(name,self.logfilepath) })

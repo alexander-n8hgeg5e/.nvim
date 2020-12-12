@@ -6,7 +6,6 @@ python cmds received from stdin linewise
 the prog connects to nvim by default
 and needs the socket as first argument
 """
-logfilepath = "/tmp/py_worker_error_log"
 import pynvim
 from sys import argv,exit
 from sys import stdin,stdout,stderr
@@ -16,6 +15,8 @@ from traceback import format_tb
 from os import set_blocking
 from math import ceil
 from pylib.file_utils.py_split import split_file_on_sep
+from pylib.syslog_utils import log as syslog
+from pylib.syslog_utils import INFO,ERR,WARN,DEBUG
 import pylib
 import os
 import sys
@@ -30,11 +31,10 @@ nvim = pynvim.attach( "socket", path=socketpath )
 
 cmds=[]
 do_log=True
-flush_instantly=False
 buflen_blocking=1
 buflen_nonblocking=1024
 
-def log(bin_msg,flush=False,file=stdout,cmd_log_max_len_half=50):
+def log(bin_msg, flush="ignored",file="ignored", level=INFO, cmd_log_max_len_half=50 ):
     if not type(bin_msg) is str:
         if type(bin_msg) is bytes:
             logmsg = bin_msg.decode()
@@ -46,9 +46,7 @@ def log(bin_msg,flush=False,file=stdout,cmd_log_max_len_half=50):
         logmsg+="\n"
     if len(logmsg) > 2 * cmd_log_max_len_half:
         logmsg=logmsg[:cmd_log_max_len_half]+"\n...skipped...\n" + logmsg[ - cmd_log_max_len_half:]
-    print(logmsg,file=file)
-    if flush_instantly or flush:
-        file.flush()
+    syslog( logmsg, level=level )
 
 def run_cmds():
     while len(cmds) > 0: # something to do
@@ -57,20 +55,17 @@ def run_cmds():
             exec(cmd)
         except:
             if do_log:
-                log("ERROR, Exception during cmd:",file=stderr)
-                log( cmd, file=stderr,flush=True, cmd_log_max_len_half=2000 )
+                log("ERROR, Exception during cmd:",level=ERR)
+                log( cmd, level=ERR, cmd_log_max_len_half=2000 )
             raise
         if do_log:
-            log("cmd:")
-            log( cmd )
+            log("pyworker "+name+" of nvim "+socketpath+" got instructions:",level=DEBUG)
+            log( cmd ,level=DEBUG)
 
-    log("pyworker "+name+" from nvim "+socketpath+" is done with cmds and waiting for new ones.")
-    stdout.flush()
-    stderr.flush()
+    log("pyworker "+name+" of nvim "+socketpath+" is done and ready.")
 
 buflen=buflen_blocking
-print("py worker "+name+" is waiting for cmds from nvim "+ socketpath  +"\n")
-stdout.flush()
+log("pyworker "+name+" of nvim "+socketpath+ " is ready.\n")
 cmds=[]
 data=b''
 while True:
@@ -109,4 +104,4 @@ while True:
         buflen=buflen_blocking
         set_blocking(stdin.buffer.fileno(),True)
 
-raise Exception("ERROR: py worker refuses to do any more work")
+raise Exception("ERROR: pyworker of nvim " + socketpath + " refuses to work")
