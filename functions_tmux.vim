@@ -114,8 +114,10 @@ function! Init_tmux_connection()
         \ 'on_stderr': function('To_log_on_event'),
         \ 'on_exit'  : function('To_log_on_event')
         \ }
+    " to enable logging append the callbacks to the
+    " jobstart parameters
     if ! exists("g:tmux_control_job") || jobwait([g:tmux_control_job],0)[0] != -1
-        let g:tmux_control_job = jobstart( ["tmux", "-S", g:tmux_socket ,"-C"], extend({"pty":"", 'shell':'tmux_control'} , s:callbacks))
+        let g:tmux_control_job = jobstart( ["tmux", "-S", g:tmux_socket ,"-C"], {"pty":"", 'shell':'tmux_control'})
     endif
     let g:Tmux_store_data_funcref = funcref('Tmux_store_data')
 endfunction
