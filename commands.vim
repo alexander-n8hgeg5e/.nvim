@@ -42,3 +42,5 @@ command! Cp call NextColor(-1)
 
 command! I so $i
 
+command! Grr exe "%!grr " . expand("%:h")
+
