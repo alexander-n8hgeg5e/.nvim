@@ -135,7 +135,7 @@ class Py_worker_pool(dict):
         for v in self.values():
             v.terminate()
         sleep(0.1)
-        self.logfile.close()
+        #self.logfile.close()
         for v in self.values():
             v.kill()
 
