@@ -1,11 +1,20 @@
 function! Create_Terminal_buffer_0(...)  "means: Action: create one
-"       called from default mapping {{{ {{{
-"       a:1 cmd
-"       a:2 tmux session name
-        stopinsert
-        let b:modified=0
+    " called from default mapping {{{ {{{
+    " a:1 cmd
+    " a:2 tmux session name
+
+    stopinsert
+    let b:modified=0
+	let tmux_cmdbase="tmux -S ". g:tmux_socket
+    " isTermMode ?
 	let isTermMode=(GetBuffersMode() == 1 || &buftype == "terminal" )
-        " get stuff
+	let has_filename=(len(expand('%:h')) > 0)
+    
+    " determine workdir
+    " =================
+    " decide whether to use the buffers opened filepath
+    " or the current vim workdir
+    " as the source for the terminal workdir
 	if (len(expand('%:h')) > 0) && ( ! isTermMode )
 		" while %:p may return no path, %:p:h always returns
 		" something, homedir or so at least
@@ -15,25 +24,33 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
 	endif
 	"let cwdname_clean=substitute(cwdname,$HOME . "/" , '' ,'g')
 	"let cwdname_clean=substitute(cwdname_clean,'\W','_','g')
-    if ! exists("a:2")
-    	let tmux_session_name= g:nvim_id ."_". Get_tmux_session_time_str()
-    else
-        let tmux_session_name=a:2
-    endif
-	let tmux_cmdbase="tmux -S ". g:tmux_socket
-	" check if buffer has a related tmux session and in case
-	" remember that and make a backup of the session name
+
+    " create new session ?
+    " ====================
+	" check if buffer has a related tmux session and if true
+	" remember this and make a backup of the session name
     " if a:1 is used, make always a new session
 	if exists("b:related_tmux_session_name") && ! exists("a:1")
 		call system( split(tmux_cmdbase) + [ "has-session", "-t", b:related_tmux_session_name] )
-		let status_has_related_session=v:shell_error
-		let tmux_session_name=b:related_tmux_session_name 
+	    let create_new_tmux_session = !(v:shell_error == 0)
 	else
-		let status_has_related_session=1
+	    let create_new_tmux_session = 1
 	endif
-	let has_related_session=(status_has_related_session==0)
 
-    if !has_related_session
+    " determine tmux session name
+    " ===========================
+    if create_new_tmux_session
+        if exists("a:2")
+            let tmux_session_name = a:2
+        else
+        	let tmux_session_name = g:nvim_id ."_". Get_tmux_session_time_str()
+        endif
+    else
+		let tmux_session_name = b:related_tmux_session_name 
+    endif
+
+
+    if create_new_tmux_session
 		" befor splitting record related session name into buffer that will be created
 		" means: relate the buffer to the session name
 		let b:related_tmux_session_name=tmux_session_name
@@ -41,22 +58,28 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
 		    let g:tmux_session_relations[b:tmux_session_name]=tmux_session_name
         endif
     endif
-
-	" no split in case: buffer has: no filename and nothing unsaved and to be sure not mode:Term
-	" (2nd: use &modified option to check)
-	" split in case: all other
-	" filename:
-	let has_filename=(len(expand('%:h')) > 0)
+    
+    " Need to split window ?
+    " =====================
+    " no need to split:
+    "                  buffer has no file
+    "                  and no unsaved contents
+    "                  and it is no terminal.
+    "                  -> althogeter this means
+    "                     it is a empty new buffer that can be
+    "                     replaced by the newly created terminal.
+    "                     So the editor stays more clean.
+    " need to split in the other cases
 	if has_filename || &modified || isTermMode
 		call EventWinLeave()
 		split
 	endif
-	" if buffer has a tmux session
-	" associated (b:related_tmux_session_name) then
-	" attach it
-	" else create one
-	" decide whether to split window
-	if has_related_session
+
+    " Contemporary State: 
+    "                    Current buffer is suitable
+    "                    for placing the terminal into.
+
+	if !create_new_tmux_session
 			exe "term " . tmux_cmdbase "attach-session -t" tmux_session_name
 	                let b:tmux_session_name=tmux_session_name
                     if has_key(g:tmux_session_relations , tmux_session_name )
