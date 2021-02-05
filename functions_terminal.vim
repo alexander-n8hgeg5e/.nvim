@@ -79,13 +79,8 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
     "                    Current buffer is suitable
     "                    for placing the terminal into.
 
-	if !create_new_tmux_session
-			exe "term " . tmux_cmdbase "attach-session -t" tmux_session_name
-	                let b:tmux_session_name=tmux_session_name
-                    if has_key(g:tmux_session_relations , tmux_session_name )
-                        let b:related_tmux_session_name= g:tmux_session_relations[tmux_session_name]
-                    endif
-	else
+	if create_new_tmux_session
+        " create
 		let acmd="term " . tmux_cmdbase . " new-session -s " . tmux_session_name . " -c " . cwdname
         if exists("a:1")
             let acmd = acmd . " " . a:1
@@ -94,7 +89,15 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
         endif
         exe acmd
 	    let b:tmux_session_name=tmux_session_name
+	else
+        " attach
+		exe "term " . tmux_cmdbase "attach-session -t" tmux_session_name
+	    let b:tmux_session_name=tmux_session_name
+        if has_key(g:tmux_session_relations , tmux_session_name )
+            let b:related_tmux_session_name= g:tmux_session_relations[tmux_session_name]
+        endif
 	endif
+
 	" set buffervars
 	" buffer vars are would be lost if set earlier
         call SetBuffersMode(1)
