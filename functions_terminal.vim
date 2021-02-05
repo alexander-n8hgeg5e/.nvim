@@ -10,8 +10,9 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
 	let isTermMode=(GetBuffersMode() == 1 || &buftype == "terminal" )
 	let has_filename=(len(expand('%:h')) > 0)
     
-    " determine workdir
-    " =================
+    "#########################
+    "##  determine workdir  ##
+    "#########################
     " decide whether to use the buffers opened filepath
     " or the current vim workdir
     " as the source for the terminal workdir
@@ -25,8 +26,9 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
 	"let cwdname_clean=substitute(cwdname,$HOME . "/" , '' ,'g')
 	"let cwdname_clean=substitute(cwdname_clean,'\W','_','g')
 
-    " create new session ?
-    " ====================
+    "############################
+    "##  create new session ?  ##
+    "############################
 	" check if buffer has a related tmux session and if true
 	" remember this and make a backup of the session name
     " if a:1 is used, make always a new session
@@ -37,8 +39,9 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
 	    let create_new_tmux_session = 1
 	endif
 
-    " determine tmux session name
-    " ===========================
+    "###################################
+    "##  determine tmux session name  ##
+    "###################################
     if create_new_tmux_session
         if exists("a:2")
             let tmux_session_name = a:2
@@ -50,17 +53,9 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
     endif
 
 
-    if create_new_tmux_session
-		" befor splitting record related session name into buffer that will be created
-		" means: relate the buffer to the session name
-		let b:related_tmux_session_name = tmux_session_name
-        if exists('b:tmux_session_name')
-		    let g:tmux_session_relations[b:tmux_session_name] = tmux_session_name
-        endif
-    endif
-    
-    " Need to split window ?
-    " =====================
+    "#############################
+    "#  Need to split window ?  ##
+    "#############################
     " no need to split:
     "                  buffer has no file
     "                  and no unsaved contents
@@ -76,6 +71,18 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
         let do_split = 0
 	endif
 
+    "##########################################
+    "##  relate buffer to tmux session name  ##
+    "##########################################
+    " needs to be done befor splitting
+    if create_new_tmux_session && do_split
+		let b:related_tmux_session_name = tmux_session_name
+        if exists('b:tmux_session_name')
+		    let g:tmux_session_relations[b:tmux_session_name] = tmux_session_name
+        endif
+    endif
+
+
 
     if do_split
 		call EventWinLeave()
@@ -87,8 +94,10 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
     "                    Current buffer is suitable
     "                    for placing the terminal into.
 
-    " attach or create terminal
-    " =========================
+    "##############################
+    "##  create terminal buffer  ##
+    "##############################
+    " then attach or create tmux
 	if create_new_tmux_session
         " create
 		let acmd="term " . tmux_cmdbase . " new-session -s " . tmux_session_name . " -c " . cwdname
@@ -108,8 +117,9 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
         endif
 	endif
 
-	" setup buffer
-    " ==============
+    " ####################
+	" ##  setup buffer  ##
+    " ####################
 	" need to setup the newly
     " created buffer
     " The order of the commands is important (for the most)
