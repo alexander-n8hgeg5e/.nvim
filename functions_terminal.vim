@@ -71,9 +71,16 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
     "                     So the editor stays more clean.
     " need to split in the other cases
 	if has_filename || &modified || isTermMode
+        let do_split = 1
+    else
+        let do_split = 0
+	endif
+
+    if do_split
 		call EventWinLeave()
 		split
-	endif
+    endif
+
 
     " Contemporary State: 
     "                    Current buffer is suitable
