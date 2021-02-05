@@ -53,9 +53,9 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
     if create_new_tmux_session
 		" befor splitting record related session name into buffer that will be created
 		" means: relate the buffer to the session name
-		let b:related_tmux_session_name=tmux_session_name
+		let b:related_tmux_session_name = tmux_session_name
         if exists('b:tmux_session_name')
-		    let g:tmux_session_relations[b:tmux_session_name]=tmux_session_name
+		    let g:tmux_session_relations[b:tmux_session_name] = tmux_session_name
         endif
     endif
     
@@ -101,7 +101,7 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
 		exe "term " . tmux_cmdbase "attach-session -t" tmux_session_name
 	    let b:tmux_session_name=tmux_session_name
         if has_key(g:tmux_session_relations , tmux_session_name )
-            let b:related_tmux_session_name= g:tmux_session_relations[tmux_session_name]
+            let b:related_tmux_session_name = g:tmux_session_relations[tmux_session_name]
         endif
 	endif
 
