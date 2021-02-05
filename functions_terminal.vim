@@ -110,7 +110,6 @@ function! Generate_funktion_Create_Terminal_buffer()
 	endif
 endfunction "}}}}}}
 
-
 function! EventTermEnter_0()  "means: Event: normal -> terminsert
 endfunction "{{{{{{
 function! EventTermEnter_1()
@@ -159,7 +158,6 @@ endif
 call extend(g:tmux_functions,{ 'ete' : g:EventTermEnter })
 
 endfunction "}}}}}}
-
 
 "" one time terminal buffer init
 "" only config dependend stuff stage0: befor insertmode
