@@ -1,7 +1,12 @@
 function! Create_Terminal_buffer_0(...)  "means: Action: create one
     " called from default mapping {{{ {{{
-    " a:1 cmd
-    " a:2 tmux session name
+    " 2 args: a:1 = cmd , a:2 = tmux session name
+    " 3 args: attach to tmux session
+    if exists("a:3")
+        let mode_attach = 1
+    else
+        let mode_attach = 0
+    endif
 
     stopinsert
     let b:modified=0
@@ -10,21 +15,23 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
 	let isTermMode=(GetBuffersMode() == 1 || &buftype == "terminal" )
 	let has_filename=(len(expand('%:h')) > 0)
     
-    "#########################
-    "##  determine workdir  ##
-    "#########################
-    " decide whether to use the buffers opened filepath
-    " or the current vim workdir
-    " as the source for the terminal workdir
-	if (len(expand('%:h')) > 0) && ( ! isTermMode )
-		" while %:p may return no path, %:p:h always returns
-		" something, homedir or so at least
-		let cwdname=expand('%:p:h')
-	else
-		let cwdname=getcwd()
-	endif
-	"let cwdname_clean=substitute(cwdname,$HOME . "/" , '' ,'g')
-	"let cwdname_clean=substitute(cwdname_clean,'\W','_','g')
+    if ! mode_attach
+        "#########################
+        "##  determine workdir  ##
+        "#########################
+        " decide whether to use the buffers opened filepath
+        " or the current vim workdir
+        " as the source for the terminal workdir
+	    if (len(expand('%:h')) > 0) && ( ! isTermMode )
+            " while %:p may return no path, %:p:h always returns
+            " something, homedir or so at least
+            let cwdname=expand('%:p:h')
+	    else
+            let cwdname=getcwd()
+	    endif
+	    "let cwdname_clean=substitute(cwdname,$HOME . "/" , '' ,'g')
+	    "let cwdname_clean=substitute(cwdname_clean,'\W','_','g')
+    endif
 
     "############################
     "##  create new session ?  ##
@@ -35,8 +42,10 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
 	if exists("b:related_tmux_session_name") && ! exists("a:1")
 		call system( split(tmux_cmdbase) + [ "has-session", "-t", b:related_tmux_session_name] )
 	    let create_new_tmux_session = !(v:shell_error == 0)
-	else
+	elseif ! mode_attach
 	    let create_new_tmux_session = 1
+    elseif mode_attach
+	    let create_new_tmux_session = 0
 	endif
 
     "###################################
@@ -48,8 +57,33 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
         else
         	let tmux_session_name = g:nvim_id ."_". Get_tmux_session_time_str()
         endif
-    else
+    elseif exists("b:related_tmux_session_name")
 		let tmux_session_name = b:related_tmux_session_name 
+    elseif mode_attach
+
+        " get visible tmux sessions
+        let visible_tmux_sessions = []
+        let buflist = []                               
+        for i in range(tabpagenr('$'))                 
+            call extend(buflist, tabpagebuflist(i + 1)) 
+        endfor                                         
+        for bn in buflist
+            let sn = getbufvar( bn, "tmux_session_name")
+            if sn != "" && index(visible_tmux_sessions,sn) == -1
+                call add(visible_tmux_sessions,sn)
+            endif
+        endfor
+
+        " get available tmux sessions
+        let tmux_session_names = systemlist(split(tmux_cmdbase) + ["list-sessions","-F","#{session_name}"])
+        
+        call reverse(tmux_session_names)
+        for name in tmux_session_names
+            if index(visible_tmux_sessions, name) == -1
+                let tmux_session_name = name
+                break
+            endif
+        endfor
     endif
 
 
