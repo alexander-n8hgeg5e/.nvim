@@ -76,6 +76,7 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
         let do_split = 0
 	endif
 
+
     if do_split
 		call EventWinLeave()
 		split
@@ -86,6 +87,8 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
     "                    Current buffer is suitable
     "                    for placing the terminal into.
 
+    " attach or create terminal
+    " =========================
 	if create_new_tmux_session
         " create
 		let acmd="term " . tmux_cmdbase . " new-session -s " . tmux_session_name . " -c " . cwdname
@@ -105,26 +108,25 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
         endif
 	endif
 
-	" set buffervars
-	" buffer vars are would be lost if set earlier
-        call SetBuffersMode(1)
+	" setup buffer
+    " ==============
+	" need to setup the newly
+    " created buffer
+    " The order of the commands is important (for the most)
+    call SetBuffersMode(1)
 	let b:tmux_cmdbase=tmux_cmdbase
 	call g:DoConfigDependentTerminalConfiguration_stage0()
-    "    autocmd TermClose      <buffer>  exe 'bufunload ' . buf
-	" init keybinds
-        call Init_Keybinds(g:keybinds,'TermMode')
-        call SetTabName_('Term')
-        set nonumber norelativenumber
-        set wrap
-	" need to run this befor startinsert
+    call Init_Keybinds(g:keybinds,'TermMode')
+    call SetTabName_('Term')
+    set nonumber norelativenumber
+    set wrap
+	" Next statement need to run befor startinsert
 	call g:DoConfigDependentTerminalConfiguration_stage1()
-        " this is needed befor terminal creation , colors are selected for background
-	" but after colorscheme setup stuff like DoConfigDependentTerminalConfiguration_stagex
-	" event win enter uses b:background so do it after
-	" DoConfigDependentTerminalConfiguration stuff
+	" Event win enter uses b:background that was setup
+    " in the previous statement. 
 	call EventWinEnter()
-        call Set_Term_Colors()
-        startinsert!
+    call Set_Term_Colors()
+    startinsert!
 endfunction "}}}
 
 function! Generate_funktion_Create_Terminal_buffer()
