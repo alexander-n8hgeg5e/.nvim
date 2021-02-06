@@ -10,11 +10,11 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
 
     stopinsert
     let b:modified=0
-	let tmux_cmdbase="tmux -S ". g:tmux_socket
+    let tmux_cmdbase="tmux -S ". g:tmux_socket
     " isTermMode ?
-	let isTermMode=(GetBuffersMode() == 1 || &buftype == "terminal" )
-	let has_filename=(len(expand('%:h')) > 0)
-    
+    let isTermMode=(GetBuffersMode() == 1 || &buftype == "terminal" )
+    let has_filename=(len(expand('%:h')) > 0)
+
     if ! mode_attach
         "#########################
         "##  determine workdir  ##
@@ -22,31 +22,31 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
         " decide whether to use the buffers opened filepath
         " or the current vim workdir
         " as the source for the terminal workdir
-	    if (len(expand('%:h')) > 0) && ( ! isTermMode )
+        if (len(expand('%:h')) > 0) && ( ! isTermMode )
             " while %:p may return no path, %:p:h always returns
             " something, homedir or so at least
             let cwdname=expand('%:p:h')
-	    else
+        else
             let cwdname=getcwd()
-	    endif
-	    "let cwdname_clean=substitute(cwdname,$HOME . "/" , '' ,'g')
-	    "let cwdname_clean=substitute(cwdname_clean,'\W','_','g')
+        endif
+        "let cwdname_clean=substitute(cwdname,$HOME . "/" , '' ,'g')
+        "let cwdname_clean=substitute(cwdname_clean,'\W','_','g')
     endif
 
     "############################
     "##  create new session ?  ##
     "############################
-	" check if buffer has a related tmux session and if true
-	" remember this and make a backup of the session name
+    " check if buffer has a related tmux session and if true
+    " remember this and make a backup of the session name
     " if a:1 is used, make always a new session
-	if exists("b:related_tmux_session_name") && ! exists("a:1")
-		call system( split(tmux_cmdbase) + [ "has-session", "-t", b:related_tmux_session_name] )
-	    let create_new_tmux_session = !(v:shell_error == 0)
-	elseif ! mode_attach
-	    let create_new_tmux_session = 1
+    if exists("b:related_tmux_session_name") && ! exists("a:1")
+        call system( split(tmux_cmdbase) + [ "has-session", "-t", b:related_tmux_session_name] )
+        let create_new_tmux_session = !(v:shell_error == 0)
+    elseif ! mode_attach
+        let create_new_tmux_session = 1
     elseif mode_attach
-	    let create_new_tmux_session = 0
-	endif
+        let create_new_tmux_session = 0
+    endif
 
     "###################################
     "##  determine tmux session name  ##
@@ -55,28 +55,26 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
         if exists("a:2")
             let tmux_session_name = a:2
         else
-        	let tmux_session_name = g:nvim_id ."_". Get_tmux_session_time_str()
+            let tmux_session_name = g:nvim_id ."_". Get_tmux_session_time_str()
         endif
     elseif exists("b:related_tmux_session_name")
-		let tmux_session_name = b:related_tmux_session_name 
+        let tmux_session_name = b:related_tmux_session_name
     elseif mode_attach
-
         " get visible tmux sessions
         let visible_tmux_sessions = []
-        let buflist = []                               
-        for i in range(tabpagenr('$'))                 
-            call extend(buflist, tabpagebuflist(i + 1)) 
-        endfor                                         
+        let buflist = []
+        for i in range(tabpagenr('$'))
+            call extend(buflist, tabpagebuflist(i + 1))
+        endfor
         for bn in buflist
             let sn = getbufvar( bn, "tmux_session_name")
             if sn != "" && index(visible_tmux_sessions,sn) == -1
                 call add(visible_tmux_sessions,sn)
             endif
         endfor
-
         " get available tmux sessions
         let tmux_session_names = systemlist(split(tmux_cmdbase) + ["list-sessions","-F","#{session_name}"])
-        
+
         call reverse(tmux_session_names)
         for name in tmux_session_names
             if index(visible_tmux_sessions, name) == -1
@@ -99,32 +97,32 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
     "                     replaced by the newly created terminal.
     "                     So the editor stays more clean.
     " need to split in the other cases
-	if has_filename || &modified || isTermMode
+    if has_filename || &modified || isTermMode
         let do_split = 1
     else
         let do_split = 0
-	endif
+    endif
 
     "##########################################
     "##  relate buffer to tmux session name  ##
     "##########################################
     " needs to be done befor splitting
     if create_new_tmux_session && do_split
-		let b:related_tmux_session_name = tmux_session_name
+        let b:related_tmux_session_name = tmux_session_name
         if exists('b:tmux_session_name')
-		    let g:tmux_session_relations[b:tmux_session_name] = tmux_session_name
+            let g:tmux_session_relations[b:tmux_session_name] = tmux_session_name
         endif
     endif
 
 
 
     if do_split
-		call EventWinLeave()
-		split
+        call EventWinLeave()
+        split
     endif
 
 
-    " Contemporary State: 
+    " Contemporary State:
     "                    Current buffer is suitable
     "                    for placing the terminal into.
 
@@ -132,61 +130,61 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
     "##  create terminal buffer  ##
     "##############################
     " then attach or create tmux
-	if create_new_tmux_session
+    if create_new_tmux_session
         " create
-		let acmd="term " . tmux_cmdbase . " new-session -s " . tmux_session_name . " -c " . cwdname
+        let acmd="term " . tmux_cmdbase . " new-session -s " . tmux_session_name . " -c " . cwdname
         if exists("a:1")
             let acmd = acmd . " " . a:1
         else
             let acmd = acmd . " fish"
         endif
         exe acmd
-	    let b:tmux_session_name=tmux_session_name
-	else
+        let b:tmux_session_name=tmux_session_name
+    else
         " attach
-		exe "term " . tmux_cmdbase "attach-session -t" tmux_session_name
-	    let b:tmux_session_name=tmux_session_name
+        exe "term " . tmux_cmdbase "attach-session -t" tmux_session_name
+        let b:tmux_session_name=tmux_session_name
         if has_key(g:tmux_session_relations , tmux_session_name )
             let b:related_tmux_session_name = g:tmux_session_relations[tmux_session_name]
         endif
-	endif
+    endif
 
     " ####################
-	" ##  setup buffer  ##
+    " ##  setup buffer  ##
     " ####################
-	" need to setup the newly
+    " need to setup the newly
     " created buffer
     " The order of the commands is important (for the most)
     call SetBuffersMode(1)
-	let b:tmux_cmdbase=tmux_cmdbase
-	call g:DoConfigDependentTerminalConfiguration_stage0()
+    let b:tmux_cmdbase=tmux_cmdbase
+    call g:DoConfigDependentTerminalConfiguration_stage0()
     call Init_Keybinds(g:keybinds,'TermMode')
     call SetTabName_('Term')
     set nonumber norelativenumber
     set wrap
-	" Next statement need to run befor startinsert
-	call g:DoConfigDependentTerminalConfiguration_stage1()
-	" Event win enter uses b:background that was setup
-    " in the previous statement. 
-	call EventWinEnter()
+    " Next statement need to run befor startinsert
+    call g:DoConfigDependentTerminalConfiguration_stage1()
+    " Event win enter uses b:background that was setup
+    " in the previous statement.
+    call EventWinEnter()
     call Set_Term_Colors()
     startinsert!
 endfunction "}}}
 
 function! Generate_funktion_Create_Terminal_buffer()
         if ! g:term_color &&  ! g:term_2color "{{{
-		let g:Create_Terminal_buffer=function("Create_Terminal_buffer_0")
-	endif
-        if   g:term_color &&   ! g:term_2color 
-		let g:Create_Terminal_buffer=function("Create_Terminal_buffer_0")
-	endif
-        if ! g:term_color &&   g:term_2color 
+        let g:Create_Terminal_buffer=function("Create_Terminal_buffer_0")
+    endif
+        if   g:term_color &&   ! g:term_2color
+        let g:Create_Terminal_buffer=function("Create_Terminal_buffer_0")
+    endif
+        if ! g:term_color &&   g:term_2color
          "no term color -> no 2 color
-		let g:Create_Terminal_buffer=function("Create_Terminal_buffer_0")
-	endif
-        if   g:term_color &&   g:term_2color 
-		let g:Create_Terminal_buffer=function("Create_Terminal_buffer_0")
-	endif
+        let g:Create_Terminal_buffer=function("Create_Terminal_buffer_0")
+    endif
+        if   g:term_color &&   g:term_2color
+        let g:Create_Terminal_buffer=function("Create_Terminal_buffer_0")
+    endif
 endfunction "}}}}}}
 
 function! EventTermEnter_0()  "means: Event: normal -> terminsert
@@ -210,18 +208,18 @@ endfunction "}}}
 
 function! Generate_funktion_EventTermEnter()
 if ! g:term_color && ! g:TerminalSpecialMovement &&  ! g:term_2color "{{{
-        let g:EventTermEnter=function("EventTermEnter_0")                                              
-endif                                                                                      
+        let g:EventTermEnter=function("EventTermEnter_0")
+endif
 if g:term_color && ! g:TerminalSpecialMovement   &&  !  g:term_2color
-        let g:EventTermEnter=function("EventTermEnter_1")                                              
-endif                                                                                      
+        let g:EventTermEnter=function("EventTermEnter_1")
+endif
 if ! g:term_color && g:TerminalSpecialMovement   &&  ! g:term_2color
-        let g:EventTermEnter=function("EventTermEnter_2")                                              
-endif                                                                                      
+        let g:EventTermEnter=function("EventTermEnter_2")
+endif
 if g:term_color && g:TerminalSpecialMovement     &&  ! g:term_2color
         let g:EventTermEnter=function("EventTermEnter_3")
 endif
-if ! g:term_color && ! g:TerminalSpecialMovement &&   g:term_2color 
+if ! g:term_color && ! g:TerminalSpecialMovement &&   g:term_2color
         let g:EventTermEnter=function("EventTermEnter_4")
 endif
 if g:term_color && ! g:TerminalSpecialMovement   &&    g:term_2color
@@ -397,10 +395,10 @@ call TerminalSpecialMovementUpdateOn()
 endfunction "}}}
 
 function! Generate_funktion_EventTermEscape()
-if ! g:term_color && ! g:TerminalSpecialMovement && ! g:term_2color "{{{  
+if ! g:term_color && ! g:TerminalSpecialMovement && ! g:term_2color "{{{
         let g:EventTermEscape=function("EventTermEscape_0")
 endif
-if g:term_color && ! g:TerminalSpecialMovement   && ! g:term_2color 
+if g:term_color && ! g:TerminalSpecialMovement   && ! g:term_2color
         let g:EventTermEscape=function("EventTermEscape_1")
 endif
 if ! g:term_color && g:TerminalSpecialMovement   && ! g:term_2color
@@ -409,7 +407,7 @@ endif
 if g:term_color && g:TerminalSpecialMovement     && ! g:term_2color
         let g:EventTermEscape=function("EventTermEscape_3")
 endif
-if ! g:term_color && ! g:TerminalSpecialMovement  &&  g:term_2color 
+if ! g:term_color && ! g:TerminalSpecialMovement  &&  g:term_2color
         let g:EventTermEscape=function("EventTermEscape_4")
 endif
 if g:term_color && ! g:TerminalSpecialMovement   &&  g:term_2color
@@ -464,7 +462,7 @@ function! TerminalSpecialMovementToggle()
      else
          let b:TerminalSpecialMovement= 0
          call TerminalSpecialMovementOff()
-     endif 
+     endif
  else
      let b:TerminalSpecialMovement= 1
      call TerminalSpecialMovementOn()
@@ -480,10 +478,10 @@ function! TerminalSpecialMovementUpdateOn()
 endfunction
 
 function! TermKeyNCE()
-	startinsert!
-	call feedkeys("\<C-a>","mt")
-	call feedkeys("s","mt")
-	call feedkeys("\<C-\>\<C-n>",'mt')
+    startinsert!
+    call feedkeys("\<C-a>","mt")
+    call feedkeys("s","mt")
+    call feedkeys("\<C-\>\<C-n>",'mt')
 endfunction
 
 function! ConfDep_Event_TermWinEnter_0() " Event
@@ -577,7 +575,7 @@ function! ConfDep_Event_TermWinLeave_1()
     exe "set sidescroll=".g:sidescroll
 endfunction
 function! ConfDep_Event_TermWinLeave_2()
-  call Set_NormMode_ColorStyle() 
+  call Set_NormMode_ColorStyle()
     exe "set sidescrolloff=".g:sidescrolloff
     exe "set sidescroll=".g:sidescroll
 endfunction
@@ -591,13 +589,13 @@ function! Generate_funktion_ConfDep_Event_TermWinLeave()
 if ! g:term_color && ! g:TerminalSpecialMovement  "{{{
         let g:ConfDep_Event_TermWinLeave=function("ConfDep_Event_TermWinLeave_0")
 endif
-if g:term_color && ! g:TerminalSpecialMovement 
+if g:term_color && ! g:TerminalSpecialMovement
         let g:ConfDep_Event_TermWinLeave=function("ConfDep_Event_TermWinLeave_1")
 endif
-if ! g:term_color && g:TerminalSpecialMovement 
+if ! g:term_color && g:TerminalSpecialMovement
         let g:ConfDep_Event_TermWinLeave=function("ConfDep_Event_TermWinLeave_2")
 endif
-if g:term_color && g:TerminalSpecialMovement 
+if g:term_color && g:TerminalSpecialMovement
         let g:ConfDep_Event_TermWinLeave=function("ConfDep_Event_TermWinLeave_3")
 endif
 endfunction "}}} }}}
