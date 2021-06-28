@@ -1,5 +1,5 @@
 
-let s:daytime=system(['fish','-d1','-c','echo -n $daytime'])
+let s:daytime=$daytime
 
 let s:daytime = substitute( s:daytime, '\v(^bind.*\n)|(\n)' , "" ,"g" )
 
