@@ -41,6 +41,7 @@ set listchars=tab:┈\ ,trail:…,nbsp:˽,conceal:․,extends:→,precedes:←,e
 " tab/indent/space settings
 set smarttab
 set expandtab
+let g:python_recommended_style=1
 set tabstop=4
 set shiftwidth=4
 set virtualedit=all
