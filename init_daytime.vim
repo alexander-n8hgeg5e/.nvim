@@ -1,9 +1,7 @@
 
-let s:daytime=$daytime
-
-let s:daytime = substitute( s:daytime, '\v(^bind.*\n)|(\n)' , "" ,"g" )
-
-if  ! empty(s:daytime) > 0
+if empty($daytime) == 0
+    let s:daytime = $daytime
+    let s:daytime = substitute( s:daytime, '\v(^bind.*\n)|(\n)' , "" ,"g" )
     let g:hour_color_flavor = s:daytime
 elseif filereadable( $vd . "/daytimeconf.vim") == 1
     " 1 == True
