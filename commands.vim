@@ -43,4 +43,4 @@ command! Cp call NextColor(-1)
 command! I so $i
 
 command! Grr exe "%!grr " . expand("%:h")
-
+command! Pla call nvim_put(["set -x NVIM_LISTEN_ADDRESS ". v:servername],'c',1,1)
