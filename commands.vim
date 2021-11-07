@@ -44,3 +44,5 @@ command! I so $i
 
 command! Grr exe "%!grr " . expand("%:h")
 command! Pla call nvim_put(["set -x NVIM_LISTEN_ADDRESS ". v:servername],'c',1,1)
+command! X  exe "r! xclip -o -selection primary"
+command! XX exe "r! xclip -o -selection clipboard"
