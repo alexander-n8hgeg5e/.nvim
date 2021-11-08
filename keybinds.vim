@@ -365,7 +365,7 @@ let additonal_keybinds = {
 \ '<M-b>___t___Common'         : [    ' ',       '<C-\><C-N><Cmd>call OpenBrowser()<CR>' ],
 \ '<LeftMouse>___c___Common'   : [    '*',       '<Esc>' ],
 \ '<F3>___ ___Common'          : [    '*',       'nzz' ],
-\ '<CR>___n___Common'          : [    '*',       '<C-]>zz' ],
+\ '<CR>___n___Common'          : [    '*<expr>', 'Keypress_CR_normal_mode()' ],
 \ '<Space>___no___Common'      : [    '*',       '<Cmd>call Cscopefind(str2nr( v:count) , expand("<cword>")) <CR>zz' ],
 \ '<Tab>___no___Common'        : [    '*',       '<C-]>zz' ],
 \ '<C-U>___n___Common'         : [    '*',       '<C-R>' ],

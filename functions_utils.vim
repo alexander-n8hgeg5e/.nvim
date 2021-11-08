@@ -132,6 +132,14 @@ function! Cscopefind(...)
 	endif
 endfunction
 
+function! Keypress_CR_normal_mode()
+    if &buftype != 'quickfix'
+        return "\<C-]>zz"
+    else
+        return "\<CR>"
+    endif
+endfunction
+
 function! LineBreakAt(bang, ...) range
   let save_search = @/
   if empty(a:bang)
