@@ -9,7 +9,6 @@ let $i= $vcd . "/init.vim"
 let $k= $vcd . "/keybinds.vim"
 "so  $vcd/p.vim this is for gentoo prefix
 let $C=$vcd . "/config.vim"
-let $p=$vcd . "/plugin_config.vim"
 "#################################
 "
 "###### load config to get settings#####################
