@@ -16,7 +16,6 @@ set writebackup
 set backup
 set autowriteall
 set undolevels=1000000
-set number
 set undofile
 set shada=!,%,'100000,/100000,:100000,@100000,s10000
 set updatetime=20000
