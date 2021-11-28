@@ -14,7 +14,7 @@ endif
 
 setlocal noswapfile buftype=nofile bufhidden=hide
 setlocal nomodified readonly nomodifiable
-setlocal noexpandtab tabstop=8 softtabstop=8 shiftwidth=8
+setlocal noexpandtab tabstop=4 softtabstop=4 shiftwidth=4
 setlocal wrap breakindent linebreak
 
 setlocal nonumber norelativenumber
