@@ -22,11 +22,11 @@ endfunction
 function! EventFindWinEnter(oldmode, mode_new)
 	"" ex mode event is not intended to be called from Event[Find]WinEnter ,
 	"" call only directly from keybinding
-	if (a:oldmode == 1) && ( a:mode_new != 1 )
-        " todo: move this
-        set number
-        set relativenumber
-    endif
+	"if (a:oldmode == 1) && ( a:mode_new != 1 )
+    "    " todo: move this
+    "    set number
+    "    set relativenumber
+    "endif
 	if (a:mode_new == 1)
 		call g:ConfDep_Event_TermWinEnter()
 	elseif (a:mode_new == 3)

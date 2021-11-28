@@ -160,7 +160,7 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
     call g:DoConfigDependentTerminalConfiguration_stage0()
     call Init_Keybinds(g:keybinds,'TermMode')
     call SetTabName_('Term')
-    set nonumber norelativenumber
+    setlocal nonumber norelativenumber
     set wrap
     " Next statement need to run befor startinsert
     call g:DoConfigDependentTerminalConfiguration_stage1()
