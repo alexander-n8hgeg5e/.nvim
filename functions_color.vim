@@ -143,7 +143,7 @@ function! Set_Term_Colors_Light()
      let g:terminal_color_3      =      "#9a9a00"  "yellow          default colors
      let g:terminal_color_4      =      "#7070ff"  "blue            default colors
      let g:terminal_color_5      =      "#ff00ff"  "magenta         default colors
-     let g:terminal_color_6      =      "#00bbbb"  "cyan            default colors
+     let g:terminal_color_6      =      "#00a0a0"  "cyan            default colors
      let g:terminal_color_7      =      "#000000"  "black           default colors
                                                    
      let g:terminal_color_8      =      "#505050"  "dark white      intense, means darker here
@@ -152,7 +152,7 @@ function! Set_Term_Colors_Light()
      let g:terminal_color_11     =      "#555500"  "dark yellow     intense, means darker here
      let g:terminal_color_12     =      "#5555ff"  "dark blue       intense, means darker here
      let g:terminal_color_13     =      "#bb00bb"  "dark magenta    intense, means darker here
-     let g:terminal_color_14     =      "#00cccc"  "dark cyan       intense, means darker here
+     let g:terminal_color_14     =      "#008080"  "dark cyan       intense, means darker here
      let g:terminal_color_15     =      "#000000"  "dark black      intense, means darker here
 
      let g:terminal_color_234    =      "#000000"  
