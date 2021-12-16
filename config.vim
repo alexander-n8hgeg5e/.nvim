@@ -216,11 +216,11 @@ let g:hour_colors_bright_light =       'summerfruit    eclipse      summerfruit 
 
 "      light:                           24-3           3-6          6-9           9-12           12-15            15-18            18-21        21-24
 let g:hour_colors_light =              'fog            codepaper    biogoo        nuvola         thegoodluck      tango-morning    carrot       fog
-\                                       habiLight      clarity      terse         orange         habiLight        MountainDew      newspaper    fog
+\                                       habiLight      clarity      terse         codepaper      habiLight        MountainDew      newspaper    fog
 \                                       PapayaWhip     PapayaWhip   colorful      intellij       thegoodluck      scite            ironman      fog'
 
 "      medium dark:                    24-3       3-6           6-9             9-12          12-15           15-18            18-21           21-24
-let g:hour_colors_medium_dark  =      'mdark      mushroom      vividchalk      chlordane     cobaltish      vividchalk        wuye            xorium
+let g:hour_colors_medium_dark  =      'mdark      mushroom      vividchalk      chlordane     cobaltish      evening           wuye            xorium
 \                                      atom       3dglasses     native          wolfpack      bwn            symfony           desertedocean   darkocean
 \                                      wolfpack   wombat256mod  bluecloud       darkeclipse   atom           asu1dark          tabula          xoria256m'
 
