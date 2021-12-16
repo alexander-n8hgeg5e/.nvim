@@ -198,7 +198,7 @@ let g:hour_color_flavor = 'daytime'
 " #############################
 let g:wait_for_day=1       " time to delay the start of the day
 let g:wait_for_night=3     " time to delay the start of the night
-let g:no_bright_light_morning=3     " at morning delay the really bright setting by this time
+let g:no_bright_light_morning=1.5   " at morning delay the really bright setting by this time
 let g:no_bright_light_evening=0.3   " have a transition from bright light to just light
 let g:preempt_dawn=4        " time to preempt the dawn (earlier medium dark )
 let g:preempt_dusk=1        " time to preempt the dusk (earlier medium dark )
