@@ -23,7 +23,12 @@ command! SR SudoRead<bang> <args>
 command! -nargs=* G call Goo("<args>")
 command! -nargs=* D call DDG("<args>")
 
+" Terminal
 command! -nargs=* T call g:Create_Terminal_buffer("<args>")
+" Attach
+command! -nargs=? A call g:Create_Terminal_buffer("","<args>","")
+" Attach all (the not attached ones)
+command! -nargs=0 Aa py3 pwp.run_pycode(pycode["tmux-sessions_open_non-attached"]['code'])
 
 command! -nargs=* M Man <args> | only
 

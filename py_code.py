@@ -187,4 +187,20 @@ for display in displays:
 """
 pycode.add_pycode( name , code ,uses_vim_vars=[],doc=doc)
 
+name="tmux-sessions_open_non-attached"
+doc="""Opens all tmux sessions that were created by keybind and are currently not connected."""
+code="""
+outp = subprocess.check_output( ["tmux", "-S",nvim.vars['tmux_socket'], "list-sessions", "-F" , '#{session_attached} #{session_name}\\n' ] ).decode().split(\"\\n\")
+outp=[o.strip() for o in outp]
+a=[]
+for o in outp:
+    if re.match( "^0 [a-zA-Z0-9]{6}(_+[0-9][0-9]*){4}(__.*$)?" ,o ):
+        a.append(o[2:])
+tmux_sessions = a
+for tmux_session in tmux_sessions:
+    nvim.command("tabnew")
+    nvim.eval(f'Create_Terminal_buffer(\"\",\"{tmux_session}\",\"\")')
+"""
+pycode.add_pycode( name , code ,uses_vim_vars=['tmux_socket'],doc=doc )
+
 # vim: set syntax=py_worker_code      :
