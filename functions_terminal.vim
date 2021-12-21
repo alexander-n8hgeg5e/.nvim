@@ -51,15 +51,13 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
     "###################################
     "##  determine tmux session name  ##
     "###################################
-    if create_new_tmux_session
-        if exists("a:2")
-            let tmux_session_name = a:2
-        else
-            let tmux_session_name = g:nvim_id ."_". Get_tmux_session_time_str()
-        endif
+    if exists("a:2") && ( strlen(a:2) > 0 )
+        " if one is given, use it
+        let tmux_session_name = a:2
     elseif exists("b:related_tmux_session_name")
         let tmux_session_name = b:related_tmux_session_name
     elseif mode_attach
+        " choose one of the not attached ones to attach to
         " get visible tmux sessions
         let visible_tmux_sessions = []
         let buflist = []
@@ -82,6 +80,11 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
                 break
             endif
         endfor
+    elseif create_new_tmux_session
+        " no name is given, no related session,
+        " and no attaching to any session
+        " so need to make a name for the new session
+        let tmux_session_name = g:nvim_id ."_". Get_tmux_session_time_str()
     endif
 
 
