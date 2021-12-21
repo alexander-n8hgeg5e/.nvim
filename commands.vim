@@ -43,6 +43,6 @@ command! Cp call NextColor(-1)
 command! I so $i
 
 command! Grr exe "%!grr " . expand("%:h")
-command! Pla call nvim_put(["set -x NVIM_LISTEN_ADDRESS ". v:servername],'c',1,1)
+command! Pla call nvim_put(["set -x NVIM_LISTEN_ADDRESS ". v:servername . " ; tmux set-environment -g NVIM_LISTEN_ADDRESS $NVIM_LISTEN_ADDRESS" ],'c',1,1)
 command! X  exe "r! xclip -o -selection primary"
 command! XX exe "r! xclip -o -selection clipboard"
