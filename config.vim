@@ -189,8 +189,11 @@ let g:event_termdaytimecolor   =  1
 " #######################
 " ##  color selection  ##
 " #######################
+" options_g:mycolors_flavor = ['daytime','hour_colors']
 let g:mycolors_flavor        =  'hour_colors'
+" let options_mycolors_default_file_flavor = Color_get_available_mycolor_flavors()
 let g:mycolors_default_file_flavor   =  'medium_dark'
+" let options_hour_color_flavor = Color_get_available_mycolor_flavors()
 let g:hour_color_flavor = 'daytime'
 
 " #############################
