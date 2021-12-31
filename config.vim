@@ -221,7 +221,7 @@ let g:hour_colors_light =              'fog            codepaper    biogoo      
 
 "      medium dark:                    24-3       3-6           6-9             9-12          12-15           15-18            18-21           21-24
 let g:hour_colors_medium_dark  =      'mdark      mushroom      vividchalk      chlordane     cobaltish      evening           wuye            xorium
-\                                      atom       3dglasses     native          wolfpack      bwn            symfony           desertedocean   darkocean
+\                                      atom       3dglasses     native          wolfpack      psclone        symfony           desertedocean   darkocean
 \                                      wolfpack   wombat256mod  bluecloud       darkeclipse   atom           asu1dark          tabula          xoria256m'
 
 "      dark:                           24-3       3-6           6-9             9-12          12-15           15-18            18-21           21-24
