@@ -299,7 +299,7 @@ function! Color_get_hour_choice()
     let i = 23
   endif
   if g:hour_color_flavor == "daytime"
-    if (hr >= g:dawntime + g:wait_for_day ) && ( hr < g:dusktime - g:preempt_dusk )
+    if (hr >= g:dawntime + g:wait_for_light ) && ( hr < g:dusktime - g:preempt_dusk )
 	    if (hr >= g:dawntime + g:no_bright_light_morning ) && ( hr < g:dusktime - g:no_bright_light_evening )
                   let nc  =  "g:hour_colors_bright_light"
                   let g:daytime="bright_light"

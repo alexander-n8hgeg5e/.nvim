@@ -196,7 +196,7 @@ let g:hour_color_flavor = 'daytime'
 " #############################
 " ##  hourcolor time options  ##
 " #############################
-let g:wait_for_day=1       " time to delay the start of the day
+let g:wait_for_light=1     " time to delay the start of the day
 let g:wait_for_night=3     " time to delay the start of the night
 let g:no_bright_light_morning=1.5   " at morning delay the really bright setting by this time
 let g:no_bright_light_evening=0.3   " have a transition from bright light to just light
