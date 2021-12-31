@@ -309,6 +309,8 @@ function! Color_get_hour_choice()
         endif
         call Set_Term_Colors_Light()
 	else
+        " Assume sun is not far from it's apex at 12 o'clock,
+        " i.e. time,dusktime,dawntime are localtimes
         " Adjust time values during night to allow comparison
         if hr > 12
             " it's late.
