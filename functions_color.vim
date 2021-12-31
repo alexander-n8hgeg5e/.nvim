@@ -319,7 +319,7 @@ function! Color_get_hour_choice()
             " it's early
             let sv = 0
         endif
-	    if ( hr  >= g:dusktime + g:wait_for_night ) && ( hr < g:dawntime - g:preempt_dawn + sv )
+	    if ( hr  >= g:dusktime + g:wait_for_dark_night ) && ( hr < g:dawntime - g:preempt_dawn + sv )
                 let nc ="g:hour_colors_dark"
                 let g:daytime="dark"
         else
