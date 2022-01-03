@@ -73,8 +73,25 @@ class Py_worker(subprocess.Popen):
                 if flush:
                     self.stdin.raw.flush()
     def __del__(self):
-        self.logfile.close()
-        self.terminate()
+        if self.logfilepath == "syslog":
+            try:
+                t0=time()
+                self.logger.terminate()
+                while self.logger.poll() is None:
+                    sleep(0.0001)
+                    t=time()-t0
+                    if t > 0.1:
+                        from warnings import warn
+                        if self.logger.poll is None:
+                            warn(f"logger of pyworker \"{self.name}\" refuses to terminate in time")
+                        break
+                #t=time()-t0
+                #print(f"time logger of pyworker {self.name}: {t}[s]")
+            finally:
+                self.logger.kill()
+                self.logger.wait
+        else:
+            self.logfile.close()
 
 
 class Py_worker_pool(dict):
@@ -132,11 +149,23 @@ class Py_worker_pool(dict):
             self[name].run_pycode(cmd, flush=flush)
 
     def __del__(self):
-        for v in self.values():
-            v.terminate()
-        sleep(0.1)
-        #self.logfile.close()
-        for v in self.values():
-            v.kill()
+        try:
+            t0=time()
+            for v in self.values():
+                v.terminate()
+            while any([v.poll() is None for v in self.values()]):
+                sleep(0.001)
+                t = time() - t0
+                if t > 0.2:
+                    from warnings import warn
+                    for v in self.values():
+                        if v.poll() is None:
+                            warn(f"pyworker \"{v.name}\" refuses to terminate in time")
+            #t = time() - t0
+            #print(f"pool termination time: {t}[s]")
+        finally:
+            for v in self.values():
+                v.kill()
+                v.wait()
 
 # vim: set foldmethod=indent foldlevel=0 :
