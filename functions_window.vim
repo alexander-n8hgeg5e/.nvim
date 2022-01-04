@@ -80,7 +80,7 @@ function! WinHeightUp()
   elseif WinIsMostBottom()
     exe "2wincmd +"
   else
-    exe "2wincmd +"
+    exe "2wincmd -"
   endif
 endfunction
 function! WinHeightDown()
@@ -89,7 +89,7 @@ function! WinHeightDown()
   elseif WinIsMostBottom()
     exe "2wincmd -"
   else
-   exe "2wincmd -"
+   exe "2wincmd +"
   endif
 endfunction
 function! WinWidthPlus()
