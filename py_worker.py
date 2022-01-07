@@ -8,6 +8,7 @@ and needs the socket as first argument
 """
 import pynvim
 from sys import argv,exit
+from os import environ
 from sys import stdin,stdout,stderr
 from os import linesep as lsep
 from time import time,sleep
@@ -22,6 +23,8 @@ import os
 import sys
 import re
 import subprocess
+sp=subprocess
+env=environ
 
 name = argv[2]
 socketpath=argv[1]
