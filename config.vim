@@ -124,7 +124,7 @@ set cmdheight=2
 set cmdwinheight=40
 set noequalalways
 set shortmess=aAtT
-set nomore
+set more
 set splitright
 set splitbelow
 set noautochdir
