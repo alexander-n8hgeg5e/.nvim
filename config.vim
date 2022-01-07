@@ -203,7 +203,7 @@ let g:wait_for_light=1          " time to delay the start of the day
 let g:wait_for_dark_night=3     " time to delay the start of the darker night during the night
 let g:no_bright_light_morning=1.5   " at morning delay the really bright setting by this time
 let g:no_bright_light_evening=1.5   " have a transition from bright light to just light
-let g:preempt_dawn=4        " time to preempt the dawn (earlier medium dark )
+let g:preempt_dawn=2        " time to preempt the dawn (earlier medium dark )
 let g:preempt_dusk=1        " time to preempt the dusk with medium dark
 let g:coords={"latitude" : 49, "longitude" : 8.375 }
 
