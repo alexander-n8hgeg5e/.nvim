@@ -309,24 +309,14 @@ function! Color_get_hour_choice()
         endif
         call Set_Term_Colors_Light()
 	else
-        " Assume sun is not far from it's apex at 12 o'clock,
-        " i.e. time,dusktime,dawntime are localtimes
-        " Adjust time values during night to allow comparison
-        if hr > 12
-            " it's late.
-            let sv = 24
+        if ( hr >= g:dusktime + g:wait_for_dark_night ) || ( hr < g:dawntime - g:preempt_dawn)
+            let nc ="g:hour_colors_dark"
+            let g:daytime="dark"
         else
-            " it's early
-            let sv = 0
+            let nc ="g:hour_colors_medium_dark"
+            let g:daytime="medium_dark"
         endif
-	    if ( hr  >= g:dusktime + g:wait_for_dark_night ) && ( hr < g:dawntime - g:preempt_dawn + sv )
-                let nc ="g:hour_colors_dark"
-                let g:daytime="dark"
-        else
-                let nc ="g:hour_colors_medium_dark"
-                let g:daytime="medium_dark"
-        endif
-            call Set_Term_Colors_Dark()
+        call Set_Term_Colors_Dark()
 	endif
   else
           let nc  =     "g:hour_colors_" . g:hour_color_flavor
