@@ -76,20 +76,20 @@ function! DefaultMode_WinMoveNewTab()
 endfunction
 function! WinHeightUp()
   if WinIsMostTop()
-    exe "2wincmd -"
+    exe "wincmd -"
   elseif WinIsMostBottom()
-    exe "2wincmd +"
+    exe "wincmd +"
   else
-    exe "2wincmd -"
+    exe "wincmd -"
   endif
 endfunction
 function! WinHeightDown()
   if WinIsMostTop()
-    exe "2wincmd +"
+    exe "wincmd +"
   elseif WinIsMostBottom()
-    exe "2wincmd -"
+    exe "wincmd -"
   else
-   exe "2wincmd +"
+   exe "wincmd +"
   endif
 endfunction
 function! WinWidthPlus()
@@ -130,8 +130,8 @@ function! WinWidthR()
 endfunction
 
 function! Win_ExMode_HeightUp()
-    exe "2wincmd +"
+    exe "wincmd +"
 endfunction
 function! Win_ExMode_HeightDown()
-    exe "2wincmd -"
+    exe "wincmd -"
 endfunction
