@@ -3,7 +3,7 @@ function! VimEnter()
     call Init_Keybinds(g:keybinds,'Common')
     call Set_NormMode_ColorStyle()
     call Color_get_hour_choice()
-    call system(["tmux_nvim_update_nvim_listen_addr ", v:servername ])
+    call jobstart(["tmux_nvim_update_nvim_listen_addr ", v:servername ])
     "set cursorline cursorcolumn
 	" new nvim , so update socket file
     "call system(['e', '--scan', '.'])
