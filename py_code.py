@@ -192,7 +192,13 @@ pycode.add_pycode( name , code ,uses_vim_vars=[],doc=doc)
 name="tmux-sessions_open_non-attached"
 doc="""Opens all tmux sessions that were created by keybind and are currently not connected."""
 code="""
-outp = subprocess.check_output( ["tmux", "-S",nvim.vars['tmux_socket'], "list-sessions", "-F" , '#{session_attached} #{session_name}\\n' ] ).decode().split(\"\\n\")
+cmd =   [
+        "tmux", "-S",
+        nvim.vars['tmux_socket'],
+        "list-sessions", "-F" ,
+        '#{session_attached} #{session_name}\\n' 
+        ]
+outp = subprocess.check_output( cmd ).decode().split("\\n")
 outp=[o.strip() for o in outp]
 a=[]
 for o in outp:
