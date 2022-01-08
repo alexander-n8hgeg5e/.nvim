@@ -139,6 +139,8 @@ def find_file_for_includeexpr():
     p=vim.vars['pyvar_includeexpr']
     l=p.split("/")
     l2=vim.call("expand","%p").split("/")
+    #pwp.run_pycode(f'log(\"{p}\")')
+    #pwp.run_pycode(f'log(\"{l2}\")')
     dirlist=[]
     for i in range(len(l)):
         for j in range(len(l2)):

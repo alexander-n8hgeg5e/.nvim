@@ -101,7 +101,7 @@ set cscopetagorder=1
 set cscopequickfix=
 
 "let pat_fname='\v^.*(\s|\W|^)(([/]?(\w|(\$[{]?\w+[}]?)|[~]?|[.-]))+)(\W|\s|$).*$'
-let pat_fname='\v^.*(\s|[^-0-9a-zA-Z/.~{}]|^)(([/]?(\w|\d|(\$[{]?\w+[}]?)|[-~.]))+).*$'
+let pat_fname='\v^.*(\s|[^-0-9a-zA-Z_/.~{}]|^)(([/]?(\w|\d|(\$[{]?\w+[}]?)|[-~.]))+).*$'
 "let pat_fname=escape(pat_fname," \"'|\\")
 "let includeexpr='substitute(getline("."),"'. pat_fname .'","\\2", "",)'
 "let includeexpr=escape(includeexpr," \"'|\\")
