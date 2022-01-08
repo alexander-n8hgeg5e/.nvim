@@ -40,6 +40,7 @@ let g:yankring_max_history = 100
 "#######################################################################################
 
 "####  nerdtree config  ################################################################
+let g:NERDTreeCreatePrefix='silent keepalt keepjumps'
 let g:NERDTreeMinimalUI=1
 let g:nerdtree_plugin_open_cmd = 'rind pyopen'
 let g:nerdtree_plugin_mail_attach_cmd = $HOME . '/code/shortcuts/mail_attach_mutt_nvim'
