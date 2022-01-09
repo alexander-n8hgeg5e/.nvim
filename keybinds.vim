@@ -393,6 +393,8 @@ let additonal_keybinds = {
 \ '<F15>___t___DefaultMode'    : [    '*',       '<Cmd>call WinHeightDown()<CR>a' ],
 \ '<F16>___t___DefaultMode'    : [    '*',       '<Cmd>call WinWidthR()<CR>a' ],
 \ '<F14>___t___DefaultMode'    : [    '*',       '<Cmd>call WinWidthL()<CR>a' ],
+\ 'gf___ ___DefaultMode'       : [    '*',       'gF' ],
+\ 'g<S-F>___ ___DefaultMode'   : [    '*',       'gf' ],
 \}
 call extend( g:keybinds, additonal_keybinds )
 
