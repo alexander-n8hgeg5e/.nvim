@@ -370,11 +370,27 @@ function! Get_comment_char()
 endfunction
 
 function! Find_file_for_includeexpr()
-    let apath=substitute(getline("."), g:pat_fname ,"\\2", "",)
+    let line = getline(".")
+    let cursorpos=getcurpos()
+    let lpos = cursorpos[1]
+    let cpos = cursorpos[2]
+    "call jobstart( 'echo cp:' . cpos.','.lpos . ' | logger ' )
+    let pat_col='\%'.cpos.'c'
+    let is_file_pat     =  '[a-zA-Z0-9_/.@~+,-]'
+    let is_not_file_pat = '[^a-zA-Z0-9_/.@~+,-]'
+    let file_after_pos    = pat_col . is_file_pat .'*'
+    let file_befor_pos = is_file_pat . '\{-}' . pat_col
+    let line_num_pat = '[:][0-9]\+'
+    let file_at_pos = file_befor_pos . file_after_pos . line_num_pat
+    let word_a = substitute(line,'^.\{-}\(' . file_at_pos. '\).*$','\1','')
+    "call jobstart( 'echo worda = ' . word_a . ' | logger ' )
+    let apath = word_a
     if filereadable(apath)
         return apath
     else
-        let g:pyvar_includeexpr=apath
+        let words2check = [ apath ] + split( line, is_not_file_pat.'\+' )
+        "call jobstart( 'echo wds:' . string(words2check) . ' | logger ' )
+        let g:pyvar_includeexpr = words2check
         py3 exec(pycode['find_file_for_includeexpr']['code'])
         py3 vim.vars['pyvar_includeexpr']=find_file_for_includeexpr()
         if g:pyvar_includeexpr != apath

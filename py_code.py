@@ -136,29 +136,56 @@ name='find_file_for_includeexpr'
 doc="""only python >= 3.6"""
 code="""
 def find_file_for_includeexpr():
-    p=vim.vars['pyvar_includeexpr']
-    l=p.split("/")
-    l2=vim.call("expand","%p").split("/")
-    #pwp.run_pycode(f'log(\"{p}\")')
-    #pwp.run_pycode(f'log(\"{l2}\")')
-    dirlist=[]
-    for i in range(len(l)):
-        for j in range(len(l2)):
-            dirlist.append("/".join(l2[:-j]+l[i:]))
     l_dirs=[]
     l_files=[]
-    tex_suffix= True if vim.eval('&filetype') in ['tex','plaintex'] else False
-    for pp in dirlist:
-        if path.exists(pp):
-            if path.isdir(pp):
-                l_dirs.append(pp)
-            else:
-                l_files.append(pp)
-    if tex_suffix:
-        for p in dirlist:
-            pp=p+".tex"
-            if path.exists(pp):
-                l_files.append(pp)
+    FLAG_TEX = 1
+    flags = 0
+    flags |= FLAG_TEX if vim.eval('&filetype') in ['tex','plaintex'] else 0
+    def do(s,flags=0):
+        s=re.sub(r'[:][0-9]+$','',s)
+        if flags > 0:
+            if FLAG_TEX in flags:
+                s_ = s + '.tex'
+                if path.isfile(s_):
+                    return s_
+            if path.isfile(s):
+                l_dirs.append(s)
+            if path.isdir(s):
+                l_dirs.append(s)
+        else:
+            if path.isfile(s):
+                return s
+            if path.isdir(s):
+                l_dirs.append(s)
+    words2check=vim.vars['pyvar_includeexpr']
+    #pwp.run_pycode(f'log(\"words2check:\"+\"{words2check}\",cmd_log_max_len_half=5000)')
+    path_roots=[]
+    pathes=[]
+    if vim.eval('&buftype') == 'terminal':
+        tmux_cmdbase = vim.eval('b:tmux_cmdbase')
+        pane_id = vim.eval('b:tmux_data')['pane_id']
+        cmd = tmux_cmdbase.split(" ") + [ 'list-panes','-t',pane_id, '-F', '#{pane_current_path}']
+        cwd = subprocess.check_output(cmd).decode().strip()
+        path_roots.append(cwd)
+        #pwp.run_pycode(f'log(\"path_roots:\"+\"{path_roots}\")')
+    else:
+        path_roots.append(vim.call("expand","%:h"))
+        path_roots.append(path.dirname(vim.call("expand","%:p")))
+    # infinity "quad" loop
+    for word in words2check:
+        for root in path_roots:
+            l =  root.split("/")
+            l2  =  word.split("/")
+            # all the beginnings and all the ends
+            # all shortened and full versions combined
+            ll=len(l)
+            for i in range(len(l)):
+                for j in range(len(l2)):
+                    p2c = "/".join(l[:ll-i]+l2[j:])
+                    r = do(p2c,flags=flags)
+                    if not r is None:
+                        return r
+    #pwp.run_pycode(f'log(\"pathes:\"+\"{pathes}\",cmd_log_max_len_half=5000)')
     if len(l_files) > 0:
         l_files.sort(key=len,reverse=True)
         return l_files[0]
