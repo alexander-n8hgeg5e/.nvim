@@ -94,38 +94,38 @@ function! WinHeightDown()
 endfunction
 function! WinWidthPlus()
   if WinIsMostRight()
-    exe "15wincmd >"
+    exe "1wincmd >"
   elseif WinIsMostLeft()
-    exe "15wincmd <"
+    exe "1wincmd <"
   else
-    exe "15wincmd <"
+    exe "1wincmd <"
   endif
 endfunction
 function! WinWidthMinus()
   if WinIsMostLeft()
-    exe "15wincmd >"
+    exe "1wincmd >"
   elseif WinIsMostRight()
-    exe "15wincmd <"
+    exe "1wincmd <"
   else
-    exe "15wincmd >"
+    exe "1wincmd >"
   endif
 endfunction
 function! WinWidthL()
   if WinIsMostLeft()
-    exe "15wincmd <"
+    exe "wincmd <"
   elseif WinIsMostRight()
-    exe "15wincmd >"
+    exe "wincmd >"
   else
-    exe "15wincmd <"
+    exe "wincmd <"
   endif
 endfunction
 function! WinWidthR()
   if WinIsMostLeft()
-    exe "15wincmd >"
+    exe "wincmd >"
   elseif WinIsMostRight()
-    exe "15wincmd <"
+    exe "wincmd <"
   else
-    exe "15wincmd >"
+    exe "wincmd >"
   endif
 endfunction
 
