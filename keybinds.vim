@@ -413,7 +413,6 @@ let additonal_keybinds = {
 \ 'a___n___TermMode'          : [ '*@',      'a<Cmd>call Tmux_functions([''exit_copy_mode'',''ete''])<CR>' ],
 \ '<Space>___n___TermMode'    : [ '*@',      'a<Cmd>call Tmux_functions([''enter_copy_mode'',''middle_line'',''ete''])<CR>' ],
 \ 'p___n___TermMode'          : [ '*@',      'p' ],
-\ 'S___n___TermMode'          : [ '*@',      '/' ],
 \ '/___n___TermMode'          : [ '*@',      'a<Cmd>call Tmux_functions([''ete'',''search_up''])<CR>' ],
 \ 'c___n___TermMode'          : [ '*@',      'a<Cmd>call Tmux_functions([''enter_copy_mode'',''ete''])<CR>' ],
 \ 'e___n___TermMode'          : [ '*@',      '<Cmd>call Tmux_functions([''first_row_e'',''ete''])     <CR><Cmd>call EventTermEnter()<CR>' ],
