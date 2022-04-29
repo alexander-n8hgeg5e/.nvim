@@ -23,7 +23,7 @@ fun! <SID>MakeNewEbuild()
     let l:category = substitute(l:filename,
                 \ "^.*/\\([^/]\\+\\)/[^/]\\+/[^/]\\+\\.ebuild", "\\1", "g")
     let l:num_only_version = substitute(l:filename,
-                \ "^.*/\\([^/]\\+\\)/[^/]\\+/[^-/]\\+[-]\\([0-9]\\+\\)\\.ebuild", "\\2", "g")
+                \ "^.*/\\([^/]\\+\\)/[^/]\\+/.\\+[-]\\([0-9]\\+\\)\\.ebuild", "\\2", "g")
 
     " use empty keywords for live ebuilds
     if l:filename =~# "-9999\\+.ebuild\$"
