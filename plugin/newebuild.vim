@@ -182,7 +182,7 @@ fun! <SID>MakeNewEbuild()
         if str2nr(l:num_only_version) > 1500000000
             let l:branch = system(['bash','-c','cd '. l:dirname . ';ghb|tr -d \\012'])
             let l:repo_uri = 'EGIT_REPO_URI="${CODEDIR}/${PN} ${MYGITHUB_URIBASE}${PN}.git"' . "\n"
-            %s/\v^\s*SRC_URI.*$/\=l:repo_uri . 'EGIT_COMMIT_DATE=' . l:num_only_version . "\n" . 'EGIT_BRANCH="'.l:branch.'"'/
+            %s/\v^\s*SRC_URI.*$/\=l:repo_uri . 'EGIT_COMMIT_DATE="${PV}"' . "\n" . 'EGIT_BRANCH="'.l:branch.'"'/
             %s/\v^\s*inherit (\S+)\s*$/inherit git-r3 \1/
         endif
         " {{{ go to the first thing to edit
