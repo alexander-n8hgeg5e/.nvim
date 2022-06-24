@@ -237,5 +237,4 @@ let g:hour_colors_dark2  =            'forneus    mushroom      baobaozhu       
 \                                      deveiate   3dglasses     oceandeep       wolfpack      camo           wintersday        desertedocean   darkocean
 \                                      asu1dark   wombat256mod  mdark           darkeclipse   paintbox       vividchalk        paintbox        xoria256m'
 
-let g:hour_colors_dark=g:hour_colors_dark2
 "##########################################################################################
