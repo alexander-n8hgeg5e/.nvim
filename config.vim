@@ -194,7 +194,7 @@ let g:mycolors_flavor        =  'hour_colors'
 " let options_mycolors_default_file_flavor = Color_get_available_mycolor_flavors()
 let g:mycolors_default_file_flavor   =  'medium_dark'
 " let options_hour_color_flavor = Color_get_available_mycolor_flavors()
-let g:hour_color_flavor = 'daytime'
+let g:hour_color_flavor = 'dark2'
 
 " #############################
 " ##  hourcolor time options  ##
@@ -235,6 +235,6 @@ let g:hour_colors_dark   =            'fnaqevan   mushroom      vividchalk      
 "      dark:                           24-3       3-6           6-9             9-12          12-15           15-18            18-21           21-24
 let g:hour_colors_dark2  =            'forneus    mushroom      baobaozhu       chlordane     paintbox       vividchalk        darkeclipse     xorium
 \                                      deveiate   3dglasses     oceandeep       wolfpack      camo           wintersday        desertedocean   darkocean
-\                                      asu1dark   wombat256mod  mdark           darkeclipse   paintbox       vividchalk        paintbox        xoria256m'
+\                                      asu1dark   vividchalk    mdark           darkeclipse   paintbox       vividchalk        paintbox        xoria256m'
 
 "##########################################################################################
