@@ -11,20 +11,11 @@ let tab_name_plugin = 1
 
 function! SetTabName(name)
     let t:tab_name = a:name
-
-    for win_number in range(1, winnr('$'))
-        call setwinvar(win_number, "tab_win_name", a:name)
-    endfor
-
     call s:RefreshTab()
 endfunction
 
 function! RemoveTabName()
-    for win_number in range(1, winnr('$'))
-        call setwinvar(win_number, "tab_win_name", '')
-    endfor
     unlet t:tab_name
-
     call s:RefreshTab()
 endfunction
 
@@ -34,19 +25,21 @@ function! s:RefreshTab()
 endfunction
 
 function! TabCaptionLabel(number)
-    let caption = ' '
-    let tab_name = gettabwinvar(a:number, 1, 'tab_win_name') 
-
-    let buflist = tabpagebuflist(a:number)
-    let winnr = tabpagewinnr(a:number)
-	let buf_name = bufname(buflist[winnr - 1])
-
+    let caption = ''
+    let tab_name = gettabvar(a:number,'tab_name') 
     if tab_name == ''
-        let caption .= pathshorten(buf_name)
+        let buflist = tabpagebuflist(a:number)
+        let winnr = tabpagewinnr(a:number)
+	    let buf_name = bufname(buflist[winnr - 1])
+        if len(buf_name) < 1
+            let caption .= " "
+        else
+            let caption .= pathshorten(buf_name)
+        endif
     else
-        let caption .= tab_name
+        let caption .= gettabvar(a:number,'tab_name') 
     endif
-    return caption.' '
+    return caption
 endfunction
 
 
@@ -54,38 +47,35 @@ function! TabCaptionLineFunction()
     let line = ''
     for i in range(tabpagenr('$'))
 
-        let modified_part = ''
+        let modified_part0 = ''
+        let modified_part1 = '%* '
         let bufnrlist = tabpagebuflist(i+1)
         for bufnr in bufnrlist
             if getbufvar(bufnr, "&modified")
-                let modified_part = '+'
+                let modified_part0 = '%#Error#+'
+                let modified_part1 = ''
                 break
             endif
         endfor
 
-        let caption = '['.(i+1).modified_part.']'
+        let caption = '['.(i+1).']'.modified_part0
         let line .= '%#String#'.caption
         " select the highlighting
         if i + 1 == tabpagenr()
             let line .= '%#TabLineSel#'
         else
-            if i % 2 == 0
-                let line .= '%#TabLine#'
-            else
-                let line .= '%#TabLine#'
-            endif
+            let line .= '%#TabLine#'
         endif
 
         let line .= '%' . (i + 1) . 'T'
 
         let line .= TabCaptionLabel(i + 1)
+        let line .= modified_part1
+
+
     endfor
 
     let line .= '%#TabLineFill#%T'
-
-    if tabpagenr('$') > 1
-        let line .= '%=%#TabLine#%999Xclose'
-    endif
 
     return line
 endfunction
@@ -118,17 +108,6 @@ function! TabGuiCaptionLabel()
     return caption
 endfunction
 
-
-function! s:TabWinEnter()
-    if exists('t:tab_name')
-        call setwinvar(winnr(), "tab_win_name", t:tab_name)
-    endif
-endfunction
-    
-augroup TabLabelNameAU
-    au!
-    au WinEnter * call s:TabWinEnter()
-augroup END
 
 call s:RefreshTab()
 
