@@ -19,3 +19,4 @@ so $HOME/.config/nvim/functions_folding.vim
 so $HOME/.config/nvim/functions_clipboard.vim 
 so $HOME/.config/nvim/functions_shortcuts.vim 
 so $HOME/.config/nvim/functions_git_utils.vim
+so $HOME/.config/nvim/functions_commands.vim
