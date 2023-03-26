@@ -95,7 +95,7 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
     "                  buffer has no file
     "                  and no unsaved contents
     "                  and it is no terminal.
-    "                  -> althogeter this means
+    "                  -> in summary this means
     "                     it is a empty new buffer that can be
     "                     replaced by the newly created terminal.
     "                     So the editor stays more clean.
@@ -162,7 +162,9 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
     let b:tmux_cmdbase=tmux_cmdbase
     call g:DoConfigDependentTerminalConfiguration_stage0()
     call Init_Keybinds(g:keybinds,'TermMode')
-    call SetTabName_('Term')
+    if ! do_split
+        call SetTabName_('Term')
+    endif
     setlocal nonumber norelativenumber
     set wrap
     " Next statement need to run befor startinsert
