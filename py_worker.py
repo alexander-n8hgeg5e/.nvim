@@ -23,6 +23,7 @@ import os
 import sys
 import re
 import subprocess
+LOGLEVEL=WARN
 sp=subprocess
 env=environ
 
@@ -38,6 +39,9 @@ buflen_blocking=1
 buflen_nonblocking=1024
 
 def log(bin_msg, flush="ignored",file="ignored", level=INFO, cmd_log_max_len_half=50 ):
+    global LOGLEVEL
+    if level > LOGLEVEL:
+        return
     if not type(bin_msg) is str:
         if type(bin_msg) is bytes:
             logmsg = bin_msg.decode()
