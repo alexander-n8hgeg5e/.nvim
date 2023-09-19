@@ -100,7 +100,7 @@ function! Conditional_fold()
   if Is_cursor_start_of_line() == 1
     try
         foldclose
-    catch E490
+    catch "E490"
     endtry
   endif
 endfunction
