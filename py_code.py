@@ -260,4 +260,4 @@ for tmux_session in tmux_sessions:
 """
 pycode.add_pycode( name , code ,uses_vim_vars=['tmux_socket'],doc=doc )
 
-# vim: set syntax=py_worker_code     foldmethod=syntax :
+# vim: set syntax=py_worker_code     foldmethod=syntax foldlevel=0:
