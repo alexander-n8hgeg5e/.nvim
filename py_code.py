@@ -221,7 +221,6 @@ doc="""only python >= 3.6"""
 code="""
 clipboard_file_path=os.environ['CLIPBOARD_FILE']
 data=nvim.eval('@"').encode(encoding="utf8")
-log(data,flush=True,level=ERR)
 displays=pylib.list_utils.uniq([i['x_server'] for i in pylib.screen_utils.parse_screen_layout_env_var_v3()])
 for display in displays:
     os.environ['DISPLAY']=display
