@@ -443,7 +443,7 @@ let additonal_keybinds = {
 \ '<C-a>___t___Common'        : [ '*',       '<C-b>' ],
 \ '<C-b>___t___Common'        : [ '*',       '<C-a>' ],
 \ '<S-C-A>___t___Common'      : [ '*',       '<C-a>' ],
-\ '<C-V>___t___Common'        : [ '*',       '<C-\><C-N>"*pi' ],
+\ '<C-V>___t___Common'        : [ '*',       '<C-\><C-N>"+pi' ],
 \ '<Esc>___t___Common'        : [ '*',       '<C-\><C-N><Cmd>call EventTermEscape()<CR>' ],
 \ '<Esc>___n___TermMode'      : [ '*',       'a<Esc>' ],
 \ 'a___n___TermMode'          : [ '*@',      'a<Cmd>call Tmux_functions([''exit_copy_mode'',''ete''])<CR>' ],
