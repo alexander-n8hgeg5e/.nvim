@@ -195,7 +195,7 @@ def find_file_for_includeexpr():
 """
 pycode.add_pycode( name , code ,uses_vim_vars=['pyvar_includeexpr'],doc=doc)
 
-name='clipboard_update_xorg'
+name='clipboard_update_xorg_s'
 doc="""only python >= 3.6"""
 code="""
 clipboard_file_path=os.environ['CLIPBOARD_FILE']
@@ -203,7 +203,29 @@ data=nvim.eval('@"').encode(encoding="utf8")
 displays=pylib.list_utils.uniq([i['x_server'] for i in pylib.screen_utils.parse_screen_layout_env_var_v3()])
 for display in displays:
     os.environ['DISPLAY']=display
-    cmd=["xclip", "-selection", "clipboard"] # 'primary' is the middle mouse one 'clipboard' the ctrl-v one
+    cmd=["xclip", "-selection", "primary"] # 'primary' is  middle mouse , 'clipboard' ctrl-v
+    p=subprocess.Popen(cmd,stdin=subprocess.PIPE,env=os.environ)
+    p.communicate(input=data)
+    if p.returncode != 0 and re.match("\S+:[0-9.]+",display):
+        display = ":"+ display.split(":")[1]
+        os.environ['DISPLAY']=display
+        p=subprocess.Popen(cmd,stdin=subprocess.PIPE,env=os.environ)
+        p.communicate(input=data)
+        if not p.returncode == 0:
+            raise subprocess.CalledProcessError(p.returncode,cmd) # TODO: add args
+"""
+pycode.add_pycode( name , code ,uses_vim_vars=[],doc=doc)
+
+name='clipboard_update_xorg_p'
+doc="""only python >= 3.6"""
+code="""
+clipboard_file_path=os.environ['CLIPBOARD_FILE']
+data=nvim.eval('@"').encode(encoding="utf8")
+log(data,flush=True,level=ERR)
+displays=pylib.list_utils.uniq([i['x_server'] for i in pylib.screen_utils.parse_screen_layout_env_var_v3()])
+for display in displays:
+    os.environ['DISPLAY']=display
+    cmd=["xclip", "-selection", "clipboard"] # 'primary' is  middle mouse , 'clipboard' ctrl-v
     p=subprocess.Popen(cmd,stdin=subprocess.PIPE,env=os.environ)
     p.communicate(input=data)
     if p.returncode != 0 and re.match("\S+:[0-9.]+",display):
