@@ -124,10 +124,24 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
         split
     endif
 
+    "##################################
+    "## Need to do more setup before ##
+    "## the terminal can be started. ##
+    "## Especially the colors        ##
+    "## need to be setup beforehand  ##
+    "##################################
+    call g:DoConfigDependentTerminalConfiguration_stage0()
+    call g:DoConfigDependentTerminalConfiguration_stage1()
+    " Event win enter and Set_Term_Colors
+    " use b:background that was setup
+    " in the previous statement.
+    call EventWinEnter()
+    " Next statement need to run befor terminal creation
+    call Set_Term_Colors()
 
     " Contemporary State:
-    "                    Current buffer is suitable
-    "                    for placing the terminal into.
+    "    Current buffer is suitable
+    "    for placing the terminal into.
 
     "##############################
     "##  create terminal buffer  ##
@@ -160,19 +174,12 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
     " The order of the commands is important (for the most)
     call SetBuffersMode(1)
     let b:tmux_cmdbase=tmux_cmdbase
-    call g:DoConfigDependentTerminalConfiguration_stage0()
     call Init_Keybinds(g:keybinds,'TermMode')
     if ! do_split
         call SetTabName_('Term')
     endif
     setlocal nonumber norelativenumber
     set wrap
-    " Next statement need to run befor startinsert
-    call g:DoConfigDependentTerminalConfiguration_stage1()
-    " Event win enter uses b:background that was setup
-    " in the previous statement.
-    call EventWinEnter()
-    call Set_Term_Colors()
     startinsert!
 endfunction "}}}
 
