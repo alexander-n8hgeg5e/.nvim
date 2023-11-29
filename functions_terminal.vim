@@ -10,7 +10,7 @@ function! Create_Terminal_buffer_0(...)  "means: Action: create one
 
     stopinsert
     let b:modified=0
-    let tmux_cmdbase="tmux -S ". g:tmux_socket
+    let tmux_cmdbase="env NVIM_LISTEN_ADDRESS=" . v:servername . " tmux -S ". g:tmux_socket
     " isTermMode ?
     let isTermMode=(GetBuffersMode() == 1 || &buftype == "terminal" )
     let has_filename=(len(expand('%:h')) > 0)
