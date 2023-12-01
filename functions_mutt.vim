@@ -1,6 +1,8 @@
 function! Mutt()
   tabnew
-  silent call termopen('m')
+  let cmd="env NVIM_LISTEN_ADDRESS=" . v:servername . " m"
+  echo cmd
+  silent call termopen(cmd)
   call SetTabName_('Mutt')
   let w:mode='mutt'
   call Init_Keybinds(g:keybinds,'Mutt')
